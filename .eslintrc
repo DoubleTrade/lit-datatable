@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb-base",
+  "parser": "babel-eslint",
+  "rules": {
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off"
+  },
+  "env": {
+      "browser": true,
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  }
+}

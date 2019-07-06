@@ -1,0 +1,12 @@
+coverage
+node_modules
+*.log
+reports/
+.DS_Store
+build
+.tmp
+npm-debug.log
+.project
+*.out
+.sonar
+package-lock.json
