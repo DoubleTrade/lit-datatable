@@ -1,12 +1,6 @@
-import {
-  LitElement, html, css
-} from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 
-import _ from 'lodash-es';
-
-import {
-  render
-} from 'lit-html';
+import { render } from 'lit-html';
 
 class DatatableTest extends LitElement {
   static get styles() {
@@ -25,21 +19,33 @@ class DatatableTest extends LitElement {
         border-collapse: seperate;
       }
 
-      thead th {
-        font-size: 12px;
+      th {
         color: rgba(0, 0, 0, var(--dark-secondary-opacity));
-        font-weight: 500;
         text-align: left;
         white-space: nowrap;
-        font-size: var(--paper-datatable-api-header-font-size, 13px);
+
+        font-weight: var(--paper-datatable-api-header-weight, 500);
+        font-size: var(--paper-datatable-api-header-font-size, 12px);
         padding: var(--paper-datatable-api-header-padding, 6px 26px);
-        height: var(--paper-datable-api-height, 43px);
+
         border-bottom: 1px solid;
         border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
       }
 
+      tbody td {
+        height: var(--paper-datatable-api-body-td-height, 43px);
+      }
+
       tbody tr {
-        height: 48px;
+        height: var(--paper-datatable-api-body-tr-height, 43px);
+      }
+
+      thead tr {
+        height: var(--paper-datatable-api-header-tr-height, 43px);
+      }
+
+      thead th {
+        height: var(--paper-datatable-api-header-th-height, 43px);
       }
 
       tbody tr:nth-child(even) {
@@ -58,12 +64,13 @@ class DatatableTest extends LitElement {
         background-color: var(--paper-datatable-api-tr-selected-background, var(--paper-grey-100));
       }
 
-      tbody td {
+      td {
         font-size: 13px;
         font-weight: normal;
         color: rgba(0, 0, 0, var(--dark-primary-opacity));
         padding: 6px var(--paper-datatable-api-horizontal-padding, 26px);
         cursor: var(--paper-datatable-api-td-cursor, inherit);
+        height: 36px;
       }
 
       tbody tr:not(:first-child) td {
@@ -208,13 +215,14 @@ class DatatableTest extends LitElement {
         this.headers.push(th);
       }
       if (datatableHeader && datatableHeader.html) {
-        render(datatableHeader.html(conf.header), th);
+        render(datatableHeader.html(conf.header, datatableHeader.property), th);
       } else {
         render(conf.header, th);
       }
       tr.appendChild(th);
     });
     this.shadowRoot.querySelector('thead').appendChild(tr);
+    console.log(this.headers);
   }
 
   _createTr(lineIndex) {
@@ -260,7 +268,6 @@ class DatatableTest extends LitElement {
       });
       this.shadowRoot.querySelector('tbody').appendChild(tr);
     });
-    console.log(this.table);
   }
 
   async _generateData() {
