@@ -135,9 +135,9 @@ class DatatableTest extends LitElement {
   }
 
   renderCell(item, td, { currentTarget }) {
-    const otherValues = this._getOtherValues(currentTarget, item);
+    const otherProperties = this._getOtherValues(currentTarget, item);
     if (currentTarget.html) {
-      render(currentTarget.html(this._extractData(item, currentTarget.property), otherValues), td);
+      render(currentTarget.html(this._extractData(item, currentTarget.property), otherProperties), td);
     } else {
       render(this._extractData(item, currentTarget.property), td);
     }
@@ -152,14 +152,14 @@ class DatatableTest extends LitElement {
   }
 
   _getOtherValues(datatableColumn, item) {
-    let otherValues = {};
-    if (datatableColumn.otherValues) {
-      otherValues = datatableColumn.otherValues.reduce((obj, key) => {
+    let otherProperties = {};
+    if (datatableColumn.otherProperties) {
+      otherProperties = datatableColumn.otherProperties.reduce((obj, key) => {
         obj[key] = item[key];
         return obj;
       }, {});
     }
-    return otherValues;
+    return otherProperties;
   }
 
   renderHtml(conf, lineIndex, item, td, tr) {

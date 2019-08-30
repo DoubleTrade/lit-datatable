@@ -22,6 +22,7 @@ class DatatableColumn extends LitElement {
       column: { type: Boolean },
       header: { type: Boolean },
       property: { type: String },
+      otherProperties: { type: Array },
       columnStyle: { type: String },
       html: { type: Function },
       eventsForDom: { type: Array },
