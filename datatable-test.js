@@ -179,10 +179,11 @@ class DatatableTest extends LitElement {
   }
 
   cleanTdElements() {
-    this.table.forEach((line) => {
+    this.table.forEach((line, lineNumber) => {
       line.columns.forEach((column, i) => {
         if (i >= (this.lastConfSize - 1)) {
           line.element.removeChild(column);
+          this.table[lineNumber].columns.splice(i, 1);
         }
       });
     });
@@ -197,7 +198,7 @@ class DatatableTest extends LitElement {
       this.headers.forEach((header, i) => {
         if (i >= (this.lastConfSize - 1)) {
           tr.removeChild(header);
-          // this.headers.splice(i, 1);
+          this.headers.splice(i, 1);
         }
       });
     }
@@ -222,7 +223,6 @@ class DatatableTest extends LitElement {
       tr.appendChild(th);
     });
     this.shadowRoot.querySelector('thead').appendChild(tr);
-    console.log(this.headers);
   }
 
   _createTr(lineIndex) {
