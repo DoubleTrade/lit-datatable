@@ -1,16 +1,32 @@
 {
-  "name": "@doubletrade/datatable-test",
+  "name": "@doubletrade/lit-datatable",
   "version": "1.0.0",
   "description": "",
-  "main": "datatable-test.js",
+  "main": "lit-datatable.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:javascript": "eslint . --ext js --ignore-path .gitignore --quiet",
+    "serve": "polymer serve"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@polymer/iron-demo-helpers": "^3.1.0",
+    "@polymer/iron-flex-layout": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/paper-dropdown-menu": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.2",
+    "@polymer/paper-item": "^3.0.1",
+    "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-tooltip": "^3.0.1",
     "lit-element": "^2.2.0",
+    "lit-html": "^1.1.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "polymer-cli": "^1.9.10"
   }
 }

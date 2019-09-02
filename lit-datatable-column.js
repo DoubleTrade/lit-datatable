@@ -1,6 +1,6 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, css } from 'lit-element';
 
-class DatatableColumn extends LitElement {
+class LitDatatableColumn extends LitElement {
   static get styles() {
     const mainStyle = css`
       :host {
@@ -15,7 +15,7 @@ class DatatableColumn extends LitElement {
     return null;
   }
 
-  static get is() { return 'datatable-column'; }
+  static get is() { return 'lit-datatable-column'; }
 
   static get properties() {
     return {
@@ -41,4 +41,4 @@ class DatatableColumn extends LitElement {
   }
 }
 
-window.customElements.define(DatatableColumn.is, DatatableColumn);
+window.customElements.define(LitDatatableColumn.is, LitDatatableColumn);

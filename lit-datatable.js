@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 
 import { render } from 'lit-html';
 
-class DatatableTest extends LitElement {
+class LitDatatable extends LitElement {
   static get styles() {
     const mainStyle = css`
       :host {
@@ -24,52 +24,52 @@ class DatatableTest extends LitElement {
         text-align: left;
         white-space: nowrap;
 
-        font-weight: var(--paper-datatable-api-header-weight, 500);
-        font-size: var(--paper-datatable-api-header-font-size, 12px);
-        padding: var(--paper-datatable-api-header-padding, 6px 26px);
+        font-weight: var(--lit-datatable-api-header-weight, 500);
+        font-size: var(--lit-datatable-api-header-font-size, 12px);
+        padding: var(--lit-datatable-api-header-padding, 6px 26px);
 
         border-bottom: 1px solid;
         border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
       }
 
       tbody td {
-        height: var(--paper-datatable-api-body-td-height, 43px);
+        height: var(--lit-datatable-api-body-td-height, 43px);
       }
 
       tbody tr {
-        height: var(--paper-datatable-api-body-tr-height, 43px);
+        height: var(--lit-datatable-api-body-tr-height, 43px);
       }
 
       thead tr {
-        height: var(--paper-datatable-api-header-tr-height, 43px);
+        height: var(--lit-datatable-api-header-tr-height, 43px);
       }
 
       thead th {
-        height: var(--paper-datatable-api-header-th-height, 43px);
+        height: var(--lit-datatable-api-header-th-height, 43px);
       }
 
       tbody tr:nth-child(even) {
-        background-color: var(--paper-datatable-api-tr-even-background-color, none);
+        background-color: var(--lit-datatable-api-tr-even-background-color, none);
       }
 
       tbody tr:nth-child(odd) {
-        background-color: var(--paper-datatable-api-tr-odd-background-color, none);
+        background-color: var(--lit-datatable-api-tr-odd-background-color, none);
       }
 
       tbody tr:hover {
-        background: var(--paper-datatable-api-tr-hover-background-color, none);
+        background: var(--lit-datatable-api-tr-hover-background-color, none);
       }
 
       tbody tr.selected {
-        background-color: var(--paper-datatable-api-tr-selected-background, var(--paper-grey-100));
+        background-color: var(--lit-datatable-api-tr-selected-background, var(--paper-grey-100));
       }
 
       td {
         font-size: 13px;
         font-weight: normal;
         color: rgba(0, 0, 0, var(--dark-primary-opacity));
-        padding: 6px var(--paper-datatable-api-horizontal-padding, 26px);
-        cursor: var(--paper-datatable-api-td-cursor, inherit);
+        padding: 6px var(--lit-datatable-api-horizontal-padding, 26px);
+        cursor: var(--lit-datatable-api-td-cursor, inherit);
         height: 36px;
       }
 
@@ -95,7 +95,7 @@ class DatatableTest extends LitElement {
     `;
   }
 
-  static get is() { return 'datatable-test'; }
+  static get is() { return 'lit-datatable'; }
 
   static get properties() {
     return {
@@ -115,45 +115,49 @@ class DatatableTest extends LitElement {
   updated(properties) {
     // Data or conf change we have to generate the table
     if (properties.has('data') || properties.has('conf')) {
-      this._generateData();
+      this.generateData();
     }
   }
 
   firstUpdated() {
     const assignedNodes = this.shadowRoot.querySelector('slot').assignedNodes();
     this.datatableColumns = new Map(assignedNodes
-      .filter(a => a.tagName === 'DATATABLE-COLUMN' && a.column)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+      .map((a) => [a.property, a]));
     this.datatableHeaders = new Map(assignedNodes
-      .filter(a => a.tagName === 'DATATABLE-COLUMN' && a.header)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+      .map((a) => [a.property, a]));
   }
 
-  _remove(type) {
+  remove(type) {
     const pgTrs = this.shadowRoot.querySelectorAll(`${type} tr`);
-    pgTrs.forEach(pgTr => this.shadowRoot.querySelector(type).removeChild(pgTr));
+    pgTrs.forEach((pgTr) => this.shadowRoot.querySelector(type).removeChild(pgTr));
   }
 
   renderCell(item, td, { currentTarget }) {
-    const otherProperties = this._getOtherValues(currentTarget, item);
-    if (currentTarget.html) {
-      render(currentTarget.html(this._extractData(item, currentTarget.property), otherProperties), td);
-    } else {
-      render(this._extractData(item, currentTarget.property), td);
+    const otherProperties = this.getOtherValues(currentTarget, item);
+    if (currentTarget && currentTarget.html) {
+      render(currentTarget.html(
+        this.extractData(item, currentTarget.property), otherProperties,
+      ), td);
+    } else if (currentTarget) {
+      render(this.extractData(item, currentTarget.property), td);
     }
   }
 
   setEventListener(datatableColumn, lineIndex, item, td) {
-    if (datatableColumn.eventsForDom[lineIndex]) {
-      datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
+    if (datatableColumn) {
+      if (datatableColumn.eventsForDom[lineIndex]) {
+        datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
+      }
+      datatableColumn.eventsForDom[lineIndex] = this.renderCell.bind(this, item, td);
+      datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
     }
-    datatableColumn.eventsForDom[lineIndex] = this.renderCell.bind(this, item, td);
-    datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
   }
 
-  _getOtherValues(datatableColumn, item) {
+  getOtherValues(datatableColumn, item) {
     let otherProperties = {};
-    if (datatableColumn.otherProperties) {
+    if (datatableColumn && datatableColumn.otherProperties) {
       otherProperties = datatableColumn.otherProperties.reduce((obj, key) => {
         obj[key] = item[key];
         return obj;
@@ -189,7 +193,7 @@ class DatatableTest extends LitElement {
     });
   }
 
-  _updateHeaders(confs) {
+  updateHeaders(confs) {
     let tr = this.shadowRoot.querySelector('table thead tr');
     if (!tr) {
       tr = document.createElement('tr');
@@ -225,7 +229,7 @@ class DatatableTest extends LitElement {
     this.shadowRoot.querySelector('thead').appendChild(tr);
   }
 
-  _createTr(lineIndex) {
+  createTr(lineIndex) {
     const tr = document.createElement('tr');
     if (!this.table[lineIndex]) {
       this.table[lineIndex] = { element: tr, columns: [] };
@@ -233,7 +237,7 @@ class DatatableTest extends LitElement {
     return tr;
   }
 
-  _createTd(lineIndex, property) {
+  createTd(lineIndex, property) {
     const datatableColumn = this.datatableColumns.get(property);
     const td = document.createElement('td');
     if (datatableColumn && datatableColumn.columnStyle) {
@@ -243,7 +247,7 @@ class DatatableTest extends LitElement {
     return td;
   }
 
-  _updateBody(confs) {
+  updateBody(confs) {
     if (this.lastDataSize > this.data.length) {
       this.cleanTrElements();
     }
@@ -255,14 +259,14 @@ class DatatableTest extends LitElement {
       if (this.table[lineIndex]) {
         tr = this.table[lineIndex].element;
       } else {
-        tr = this._createTr(lineIndex);
+        tr = this.createTr(lineIndex);
       }
       confs.forEach((conf, columnIndex) => {
         let td;
         if (this.table[lineIndex].columns[columnIndex]) {
           td = this.table[lineIndex].columns[columnIndex];
         } else {
-          td = this._createTd(lineIndex, conf.property);
+          td = this.createTd(lineIndex, conf.property);
         }
         this.renderHtml(conf, lineIndex, item, td, tr);
       });
@@ -270,21 +274,21 @@ class DatatableTest extends LitElement {
     });
   }
 
-  async _generateData() {
+  async generateData() {
     await this.updateComplete;
     if (this.debounceGenerate) {
       clearTimeout(this.debounceGenerate);
     }
     this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter(c => !c.hidden);
-      this._updateHeaders(confs);
-      this._updateBody(confs);
+      const confs = [...this.conf].filter((c) => !c.hidden);
+      this.updateHeaders(confs);
+      this.updateBody(confs);
       this.lastDataSize = this.data.length;
       this.lastConfSize = confs.length;
     });
   }
 
-  _extractData(item, columnProperty) {
+  extractData(item, columnProperty) {
     if (columnProperty) {
       const splittedProperties = columnProperty.split('.');
       if (splittedProperties.length > 1) {
@@ -302,4 +306,4 @@ class DatatableTest extends LitElement {
   }
 }
 
-window.customElements.define(DatatableTest.is, DatatableTest);
+window.customElements.define(LitDatatable.is, LitDatatable);
