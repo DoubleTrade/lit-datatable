@@ -122,19 +122,19 @@ class LitDatatable extends LitElement {
   firstUpdated() {
     const assignedNodes = this.shadowRoot.querySelector('slot').assignedNodes();
     this.datatableColumns = new Map(assignedNodes
-      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
-      .map((a) => [a.property, a]));
+      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+      .map(a => [a.property, a]));
     this.datatableHeaders = new Map(assignedNodes
-      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
-      .map((a) => [a.property, a]));
+      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+      .map(a => [a.property, a]));
   }
 
   remove(type) {
     const pgTrs = this.shadowRoot.querySelectorAll(`${type} tr`);
-    pgTrs.forEach((pgTr) => this.shadowRoot.querySelector(type).removeChild(pgTr));
+    pgTrs.forEach(pgTr => this.shadowRoot.querySelector(type).removeChild(pgTr));
   }
 
-  renderCell(item, td, { currentTarget }) {
+  renderCell(item, td, confProperty, { currentTarget }) {
     const otherProperties = this.getOtherValues(currentTarget, item);
     if (currentTarget && currentTarget.html) {
       render(currentTarget.html(
@@ -142,15 +142,17 @@ class LitDatatable extends LitElement {
       ), td);
     } else if (currentTarget) {
       render(this.extractData(item, currentTarget.property), td);
+    } else if (confProperty) {
+      render(this.extractData(item, confProperty), td);
     }
   }
 
-  setEventListener(datatableColumn, lineIndex, item, td) {
+  setEventListener(datatableColumn, lineIndex, item, td, property) {
     if (datatableColumn) {
       if (datatableColumn.eventsForDom[lineIndex]) {
         datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
       }
-      datatableColumn.eventsForDom[lineIndex] = this.renderCell.bind(this, item, td);
+      datatableColumn.eventsForDom[lineIndex] = this.renderCell.bind(this, item, td, property);
       datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
     }
   }
@@ -169,14 +171,14 @@ class LitDatatable extends LitElement {
   renderHtml(conf, lineIndex, item, td, tr) {
     const { property } = conf;
     const datatableColumn = this.datatableColumns.get(property);
-    this.setEventListener(datatableColumn, lineIndex, item, td);
-    this.renderCell(item, td, { currentTarget: datatableColumn });
+    this.setEventListener(datatableColumn, lineIndex, item, td, property);
+    this.renderCell(item, td, property, { currentTarget: datatableColumn });
     tr.appendChild(td);
   }
 
   cleanTrElements() {
     this.table.forEach((line, i) => {
-      if (i >= (this.lastDataSize - 1)) {
+      if (i >= (this.data.length - 1)) {
         this.shadowRoot.querySelector('tbody').removeChild(line.element);
       }
     });
@@ -185,7 +187,7 @@ class LitDatatable extends LitElement {
   cleanTdElements() {
     this.table.forEach((line, lineNumber) => {
       line.columns.forEach((column, i) => {
-        if (i >= (this.lastConfSize - 1)) {
+        if (i >= (this.data.length - 1)) {
           line.element.removeChild(column);
           this.table[lineNumber].columns.splice(i, 1);
         }
@@ -248,30 +250,32 @@ class LitDatatable extends LitElement {
   }
 
   updateBody(confs) {
-    if (this.lastDataSize > this.data.length) {
-      this.cleanTrElements();
-    }
-    if (this.lastConfSize > confs.length) {
-      this.cleanTdElements();
-    }
-    this.data.forEach((item, lineIndex) => {
-      let tr;
-      if (this.table[lineIndex]) {
-        tr = this.table[lineIndex].element;
-      } else {
-        tr = this.createTr(lineIndex);
+    if (this.data !== undefined) {
+      if (this.lastDataSize > this.data.length) {
+        this.cleanTrElements();
       }
-      confs.forEach((conf, columnIndex) => {
-        let td;
-        if (this.table[lineIndex].columns[columnIndex]) {
-          td = this.table[lineIndex].columns[columnIndex];
+      if (this.lastConfSize > confs.length) {
+        this.cleanTdElements();
+      }
+      this.data.forEach((item, lineIndex) => {
+        let tr;
+        if (this.table[lineIndex]) {
+          tr = this.table[lineIndex].element;
         } else {
-          td = this.createTd(lineIndex, conf.property);
+          tr = this.createTr(lineIndex);
         }
-        this.renderHtml(conf, lineIndex, item, td, tr);
+        confs.forEach((conf, columnIndex) => {
+          let td;
+          if (this.table[lineIndex].columns[columnIndex]) {
+            td = this.table[lineIndex].columns[columnIndex];
+          } else {
+            td = this.createTd(lineIndex, conf.property);
+          }
+          this.renderHtml(conf, lineIndex, item, td, tr);
+        });
+        this.shadowRoot.querySelector('tbody').appendChild(tr);
       });
-      this.shadowRoot.querySelector('tbody').appendChild(tr);
-    });
+    }
   }
 
   async generateData() {
@@ -280,11 +284,13 @@ class LitDatatable extends LitElement {
       clearTimeout(this.debounceGenerate);
     }
     this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter((c) => !c.hidden);
+      const confs = [...this.conf].filter(c => !c.hidden);
       this.updateHeaders(confs);
       this.updateBody(confs);
-      this.lastDataSize = this.data.length;
-      this.lastConfSize = confs.length;
+      if (this.data !== undefined) {
+        this.lastDataSize = this.data.length;
+        this.lastConfSize = confs.length;
+      }
     });
   }
 

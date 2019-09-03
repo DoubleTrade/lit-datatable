@@ -38,11 +38,7 @@ const conf = [
 
 ## Simple example
 ```html
-<lit-datatable .data="${data}" .conf="${conf}">
-  <lit-datatable-column column="${true}" property="fruit"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
-</lit-datatable>
+<lit-datatable .data="${data}" .conf="${conf}"></lit-datatable>
 ```
 ## With HTML header
 Use native html from lit-html to render a custom header.
@@ -53,9 +49,6 @@ const headerOfFruit = (value, property) => html`<div style="color: red;">${value
 ```html
 <lit-datatable .data="${data}" .conf="${conf}">
   <lit-datatable-column header="${true}" property="fruit" .html="${headerOfFruit}"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="fruit"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
 </lit-datatable>
 ```
 ## With HTML data
@@ -66,8 +59,6 @@ const bodyOfFruit = (value, property) => html`<div style="color: red;">${value}<
 ```html
 <lit-datatable .data="${data}" .conf="${conf}">
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
 </lit-datatable>
 ```
 ## With HTML data and footer
@@ -75,8 +66,6 @@ A footer is available to catch size and page changed in order to relaunch the re
 ```html
 <lit-datatable .data="${data}" .conf="${conf}">
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
 </lit-datatable>
 <lit-datatable-footer
   @size-changed="${this._handleSizeChanged}"
@@ -105,7 +94,5 @@ const sort = key => (value, property) => html`
 <lit-datatable .data="${data}" .conf="${conf}">
   <lit-datatable-column header="${true}" property="fruit" .html="${sort}"></lit-datatable-column>
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-  <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
 </lit-datatable>
 ```

@@ -46,32 +46,21 @@ class LitDatatableDemo extends LitElement {
     return html`
       <div class="content">
         <!-- Simple demo -->
-        <lit-datatable .data="${data}" .conf="${conf}">
-          <lit-datatable-column column="${true}" property="fruit"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
-        </lit-datatable>
+        <lit-datatable .data="${data}" .conf="${conf}"></lit-datatable>
 
         <!-- With html header -->
         <lit-datatable .data="${data}" .conf="${conf}">
           <lit-datatable-column header="${true}" property="fruit" .html="${headerOfFruit}"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="fruit"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
         </lit-datatable>
 
         <!-- With html data -->
         <lit-datatable .data="${data}" .conf="${conf}">
           <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
         </lit-datatable>
 
         <!-- With html data and footer -->
         <lit-datatable .data="${data}" .conf="${conf}">
           <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
         </lit-datatable>
         <lit-datatable-footer
           .availableSize="${[5, 10, 25]}"
@@ -86,8 +75,6 @@ class LitDatatableDemo extends LitElement {
         <lit-datatable .data="${data}" .conf="${conf}">
           <lit-datatable-column header="${true}" property="fruit" .html="${sort}"></lit-datatable-column>
           <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="color"></lit-datatable-column>
-          <lit-datatable-column column="${true}" property="weight"></lit-datatable-column>
         </lit-datatable>
       </div>`;
   }
