@@ -28,5 +28,9 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "polymer-cli": "^1.9.10"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/DoubleTrade/lit-datatable"
   }
 }
