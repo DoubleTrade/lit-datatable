@@ -181,10 +181,10 @@ class LitDatatable extends LitElement {
 
   cleanTdElements() {
     this.table.forEach((line, lineNumber) => {
-      line.columns.forEach((column, i) => {
-        if (i >= (this.conf.length - 1)) {
+      line.columns.forEach((column, columnNumber) => {
+        if (columnNumber >= (this.lastConfSize - 1)) {
           line.element.removeChild(column);
-          this.table[lineNumber].columns.splice(i, 1);
+          this.table[lineNumber].columns.splice(columnNumber, 1);
         }
       });
     });
