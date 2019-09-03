@@ -129,11 +129,6 @@ class LitDatatable extends LitElement {
       .map(a => [a.property, a]));
   }
 
-  remove(type) {
-    const pgTrs = this.shadowRoot.querySelectorAll(`${type} tr`);
-    pgTrs.forEach(pgTr => this.shadowRoot.querySelector(type).removeChild(pgTr));
-  }
-
   renderCell(item, td, confProperty, { currentTarget }) {
     const otherProperties = this.getOtherValues(currentTarget, item);
     if (currentTarget && currentTarget.html) {
@@ -187,7 +182,7 @@ class LitDatatable extends LitElement {
   cleanTdElements() {
     this.table.forEach((line, lineNumber) => {
       line.columns.forEach((column, i) => {
-        if (i >= (this.data.length - 1)) {
+        if (i >= (this.conf.length - 1)) {
           line.element.removeChild(column);
           this.table[lineNumber].columns.splice(i, 1);
         }
