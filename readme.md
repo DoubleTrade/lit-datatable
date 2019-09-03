@@ -1,3 +1,4 @@
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/@doubletrade/lit-datatable)
 # lit-datatable
 
 `lit-datatable` is a material design implementation of a data table.
