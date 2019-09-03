@@ -96,3 +96,7 @@ const sort = key => (value, property) => html`
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
 </lit-datatable>
 ```
+## Custom style on a td
+```html
+<lit-datatable-column column="${true}" property="fruit" columnStyle="padding: 0; min-width: initial;"></lit-datatable-column>
+```
