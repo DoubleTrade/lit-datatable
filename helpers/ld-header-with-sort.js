@@ -19,6 +19,10 @@ class LdHeaderWithSort extends Localize(LitElement) {
         display: block;
       }
 
+      .desc, .asc {
+        transition: transform 0.2s;
+      }
+
       .desc {
         color: var(--lit-datatable-api-arrow-color, var(--paper-light-green-600));
         transform: rotate(0deg);
