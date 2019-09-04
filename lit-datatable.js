@@ -32,6 +32,13 @@ class LitDatatable extends LitElement {
         border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
       }
 
+      th.sticky {
+        position: sticky;
+        background: white;
+        top: 0;
+        z-index: 1;
+      }
+
       tbody td {
         height: var(--lit-datatable-api-body-td-height, 43px);
       }
@@ -103,6 +110,7 @@ class LitDatatable extends LitElement {
       conf: { type: Array },
       table: { type: Array },
       headers: { type: Array },
+      stickyHeader: { type: Boolean },
     };
   }
 
@@ -211,6 +219,9 @@ class LitDatatable extends LitElement {
         th = this.headers[i];
       } else {
         th = document.createElement('th');
+        if (this.stickyHeader) {
+          th.classList.add('sticky');
+        }
         if (datatableHeader && datatableHeader.columnStyle) {
           th.setAttribute('style', datatableHeader.columnStyle);
         }

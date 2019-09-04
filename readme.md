@@ -41,6 +41,10 @@ const conf = [
 ```html
 <lit-datatable .data="${data}" .conf="${conf}"></lit-datatable>
 ```
+## Simple example with sticky header
+```html
+<lit-datatable ?stickyHeader="${true}" .data="${data}" .conf="${conf}"></lit-datatable>
+```
 ## With HTML header
 Use native html from lit-html to render a custom header.
 Header can use value from data and property from conf.
