@@ -180,9 +180,10 @@ class LitDatatable extends LitElement {
   }
 
   cleanTrElements() {
-    this.table.forEach((line, i) => {
-      if (i >= (this.data.length - 1)) {
+    this.table.forEach((line, lineNumber) => {
+      if (lineNumber >= (this.data.length - 1)) {
         this.shadowRoot.querySelector('tbody').removeChild(line.element);
+        this.table.splice(lineNumber, 1);
       }
     });
   }
@@ -257,11 +258,11 @@ class LitDatatable extends LitElement {
 
   updateBody(confs) {
     if (this.data !== undefined) {
-      if (this.lastDataSize > this.data.length) {
-        this.cleanTrElements();
-      }
       if (this.lastConfSize > confs.length) {
         this.cleanTdElements();
+      }
+      if (this.lastDataSize > this.data.length) {
+        this.cleanTrElements();
       }
       this.data.forEach((item, lineIndex) => {
         let tr;
