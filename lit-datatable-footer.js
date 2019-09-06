@@ -44,15 +44,7 @@ class LitDatatableFooter extends Localize(LitElement) {
         width: 64px;
         text-align: right;
       }
-
-      paper-dropdown-menu {
-        text-align: right;
-        font-weight: 500;
-        --paper-input-container-underline_-_display: none;
-        --paper-input-container-input_-_font-size: 12px;
-        --paper-input-container-input_-_color: var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54));
-        --paper-dropdown-menu-icon_-_color: var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54));
-      }`;
+      `;
     return [mainStyle, ironFlexLayoutAlignTheme, ironFlexLayoutTheme];
   }
 
@@ -72,7 +64,7 @@ class LitDatatableFooter extends Localize(LitElement) {
               <div class="size">
                 <paper-dropdown-menu no-label-float vertical-align="bottom">
                   <paper-listbox attr-for-selected="size" @iron-select="${this.newSizeIsSelected}" selected="${this.size}" slot="dropdown-content">
-                    ${this.availableSize && this.availableSize.map((size) => html`
+                    ${this.availableSize && this.availableSize.map(size => html`
                       <paper-item size="${size}">${size}</paper-item>
                     `)}
                   </paper-listbox>
@@ -145,7 +137,6 @@ class LitDatatableFooter extends Localize(LitElement) {
       footerPosition: { type: String },
       size: { type: Number },
       page: { type: Number },
-      oldPage: { type: Number },
       totalElements: { type: Number },
       totalPages: { type: Number },
       availableSize: { type: Array },
@@ -186,14 +177,15 @@ class LitDatatableFooter extends Localize(LitElement) {
   }
 
   newSizeIsSelected({ currentTarget }) {
-    const newSize = currentTarget.selected;
+    let newSize = currentTarget.selected;
     if (newSize) {
-      if (this.oldPage !== null && this.oldPage !== undefined) {
+      newSize = parseInt(newSize, 10);
+      if (newSize !== this.size) {
         this.page = 0;
+        this.size = parseInt(newSize, 10);
         this.dispatchEvent(new CustomEvent('page-changed', { detail: this.page }));
+        this.dispatchEvent(new CustomEvent('size-changed', { detail: this.size }));
       }
-      this.size = newSize;
-      this.dispatchEvent(new CustomEvent('size-changed', { detail: this.size }));
     }
   }
 
@@ -204,12 +196,18 @@ class LitDatatableFooter extends Localize(LitElement) {
     return '';
   }
 
-  firstUpdated() {
+  async firstUpdated() {
+    await this.updateComplete;
     const paperDropdownMenu = this.shadowRoot.querySelector('paper-dropdown-menu');
-    paperDropdownMenu.customStyle['--paper-input-container-underline_-_display'] = 'none';
-    paperDropdownMenu.customStyle['--paper-input-container-input'] = '{text-align: right; font-size: 12px; font-weight: 500; color: var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))}';
-    paperDropdownMenu.customStyle['--paper-dropdown-menu-icon'] = '{color: var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))}';
-    paperDropdownMenu.updateStyles();
+    paperDropdownMenu.updateStyles({
+      '--paper-input-container-underline_-_display': 'none',
+      '--paper-input-container-shared-input-style_-_font-weight': '500',
+      '--paper-input-container-shared-input-style_-_text-align': 'right',
+      '--paper-input-container-shared-input-style_-_font-size': '12px',
+      '--paper-input-container-shared-input-style_-_color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+      '--paper-input-container-input-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+      '--disabled-text-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+    });
   }
 }
 
