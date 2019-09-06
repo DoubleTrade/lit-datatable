@@ -130,11 +130,11 @@ class LitDatatable extends LitElement {
   firstUpdated() {
     const assignedNodes = this.shadowRoot.querySelector('slot').assignedNodes();
     this.datatableColumns = new Map(assignedNodes
-      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+      .map((a) => [a.property, a]));
     this.datatableHeaders = new Map(assignedNodes
-      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+      .map((a) => [a.property, a]));
   }
 
   renderCell(item, td, confProperty, { currentTarget }) {
@@ -180,7 +180,7 @@ class LitDatatable extends LitElement {
   }
 
   cleanEventsOfTr(item) {
-    item.events.forEach(event => item.element.removeEventListener(event.type, event.event));
+    item.events.forEach((event) => item.element.removeEventListener(event.type, event.event));
   }
 
   createEventsOfTr(tr, item) {
@@ -314,7 +314,7 @@ class LitDatatable extends LitElement {
       clearTimeout(this.debounceGenerate);
     }
     this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter(c => !c.hidden);
+      const confs = [...this.conf].filter((c) => !c.hidden);
       this.updateHeaders(confs);
       this.updateBody(confs);
       if (this.data !== undefined) {

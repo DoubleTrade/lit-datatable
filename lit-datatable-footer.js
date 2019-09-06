@@ -64,7 +64,7 @@ class LitDatatableFooter extends Localize(LitElement) {
               <div class="size">
                 <paper-dropdown-menu no-label-float vertical-align="bottom">
                   <paper-listbox attr-for-selected="size" @iron-select="${this.newSizeIsSelected}" selected="${this.size}" slot="dropdown-content">
-                    ${this.availableSize && this.availableSize.map(size => html`
+                    ${this.availableSize && this.availableSize.map((size) => html`
                       <paper-item size="${size}">${size}</paper-item>
                     `)}
                   </paper-listbox>

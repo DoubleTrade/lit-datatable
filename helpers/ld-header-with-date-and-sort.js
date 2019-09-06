@@ -66,11 +66,11 @@ class LdHeaderWithDateAndSort extends PolymerElement {
                   date-to="{{dateTo}}"
                   force-narrow>
                   <template>
-                    <paper-input no-label-float placeholder="[[header]]" value="[[_computeDate(dateFrom, dateTo, noRange)]]" readonly>
+                    <paper-input no-label-float placeholder="[[header]]" value="[[computeDate(dateFrom, dateTo, noRange)]]" readonly>
                     </paper-input>
                   </template>
                 </range-datepicker-input>
-                <paper-icon-button icon="clear" on-tap="_clearDate"></paper-icon-button>
+                <paper-icon-button icon="clear" on-tap="clearDate"></paper-icon-button>
               </div>
             </ld-header-with-sort>
           </template>
@@ -104,11 +104,11 @@ class LdHeaderWithDateAndSort extends PolymerElement {
       },
       dateFrom: {
         type: String,
-        observer: '_dateFromChanged',
+        observer: 'dateFromChanged',
       },
       dateTo: {
         type: String,
-        observer: '_dateToChanged',
+        observer: 'dateToChanged',
       },
       locale: String,
       noRange: {
@@ -122,7 +122,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
     };
   }
 
-  _dateToChanged(dateTo) {
+  dateToChanged(dateTo) {
     if (this.dateFrom && dateTo) {
       this.dispatchEvent(new CustomEvent('filter', {
         detail: {
@@ -133,7 +133,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
     }
   }
 
-  _dateFromChanged(dateFrom) {
+  dateFromChanged(dateFrom) {
     if (dateFrom && this.noRange) {
       this.dispatchEvent(new CustomEvent('filter', {
         detail: {
@@ -159,7 +159,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
     }
   }
 
-  _computeDate(dateFrom, dateTo, noRange) {
+  computeDate(dateFrom, dateTo, noRange) {
     if (dateFrom && dateTo) {
       return `${dateFrom} ${dateTo}`;
     }
@@ -169,7 +169,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
     return null;
   }
 
-  _clearDate() {
+  clearDate() {
     this.toggleActive();
     this.dispatchEvent(new CustomEvent('filter', {
       detail: {
