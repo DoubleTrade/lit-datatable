@@ -179,9 +179,22 @@ class LitDatatable extends LitElement {
     tr.appendChild(td);
   }
 
+  cleanEventsOfTr(item) {
+    item.events.forEach(event => item.element.removeEventListener(event.type, event.event));
+  }
+
+  createEventsOfTr(tr, item) {
+    const trOverEvent = this.trHover.bind(this, item);
+    const trOutEvent = this.trOut.bind(this, item);
+    tr.addEventListener('mouseover', trOverEvent);
+    tr.addEventListener('mouseout', trOutEvent);
+    return [{ type: 'mouseover', event: trOverEvent }, { type: 'mouseout', event: trOutEvent }];
+  }
+
   cleanTrElements() {
-    this.table.forEach((line, lineNumber) => {
+    [...this.table].forEach((line, lineNumber) => {
       if (lineNumber >= (this.data.length - 1)) {
+        this.cleanEventsOfTr(line);
         this.shadowRoot.querySelector('tbody').removeChild(line.element);
         this.table.splice(lineNumber, 1);
       }
@@ -189,7 +202,7 @@ class LitDatatable extends LitElement {
   }
 
   cleanTdElements() {
-    this.table.forEach((line, lineNumber) => {
+    [...this.table].forEach((line, lineNumber) => {
       line.columns.forEach((column, columnNumber) => {
         if (columnNumber >= (this.lastConfSize - 1)) {
           line.element.removeChild(column);
@@ -205,7 +218,7 @@ class LitDatatable extends LitElement {
       tr = document.createElement('tr');
     }
     if (this.lastConfSize > confs.length) {
-      this.headers.forEach((header, i) => {
+      [...this.headers].forEach((header, i) => {
         if (i >= (this.lastConfSize - 1)) {
           tr.removeChild(header);
           this.headers.splice(i, 1);
@@ -238,10 +251,18 @@ class LitDatatable extends LitElement {
     this.shadowRoot.querySelector('thead').appendChild(tr);
   }
 
-  createTr(lineIndex) {
+  trHover(item) {
+    this.dispatchEvent(new CustomEvent('tr-mouseover', { detail: item }));
+  }
+
+  trOut(item) {
+    this.dispatchEvent(new CustomEvent('tr-mouseout', { detail: item }));
+  }
+
+  createTr(lineIndex, item) {
     const tr = document.createElement('tr');
     if (!this.table[lineIndex]) {
-      this.table[lineIndex] = { element: tr, columns: [] };
+      this.table[lineIndex] = { element: tr, columns: [], events: this.createEventsOfTr(tr, item) };
     }
     return tr;
   }
@@ -267,9 +288,11 @@ class LitDatatable extends LitElement {
       this.data.forEach((item, lineIndex) => {
         let tr;
         if (this.table[lineIndex]) {
+          this.cleanEventsOfTr(this.table[lineIndex]);
           tr = this.table[lineIndex].element;
+          this.table[lineIndex].events = this.createEventsOfTr(tr, item);
         } else {
-          tr = this.createTr(lineIndex);
+          tr = this.createTr(lineIndex, item);
         }
         confs.forEach((conf, columnIndex) => {
           let td;
