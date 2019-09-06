@@ -16,11 +16,14 @@
     "@polymer/iron-icons": "^3.0.1",
     "@polymer/paper-dropdown-menu": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.2",
+    "@polymer/paper-input": "^3.0.2",
     "@polymer/paper-item": "^3.0.1",
     "@polymer/paper-listbox": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
+    "@polymer/polymer": "^3.3.0",
     "lit-element": "^2.2.0",
-    "lit-html": "^1.1.2"
+    "lit-html": "^1.1.2",
+    "@doubletrade/range-datepicker": "git+https://git@github.com/roxus/range-datepicker.git#master"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -30,7 +33,7 @@
     "polymer-cli": "^1.9.10"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/DoubleTrade/lit-datatable"
+    "type": "git",
+    "url": "https://github.com/DoubleTrade/lit-datatable"
   }
 }
