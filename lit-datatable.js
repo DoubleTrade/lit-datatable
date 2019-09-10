@@ -251,6 +251,10 @@ class LitDatatable extends LitElement {
     this.shadowRoot.querySelector('thead').appendChild(tr);
   }
 
+  trCreated(tr, lineIndex, item) {
+    this.dispatchEvent(new CustomEvent('tr-create', { detail: { tr, lineIndex, item } }));
+  }
+
   trHover(item) {
     this.dispatchEvent(new CustomEvent('tr-mouseover', { detail: item }));
   }
@@ -294,6 +298,9 @@ class LitDatatable extends LitElement {
         } else {
           tr = this.createTr(lineIndex, item);
         }
+
+        this.trCreated(tr, lineIndex, item);
+
         confs.forEach((conf, columnIndex) => {
           let td;
           if (this.table[lineIndex].columns[columnIndex]) {
