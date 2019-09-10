@@ -1,6 +1,6 @@
 {
   "name": "@doubletrade/lit-datatable",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "lit-datatable is a material design implementation of a data table, powered by lit-element.",
   "main": "lit-datatable.js",
   "scripts": {
@@ -11,26 +11,26 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@polymer/iron-demo-helpers": "^3.1.0",
-    "@polymer/iron-flex-layout": "^3.0.1",
-    "@polymer/iron-icons": "^3.0.1",
-    "@polymer/paper-dropdown-menu": "^3.0.1",
-    "@polymer/paper-icon-button": "^3.0.2",
-    "@polymer/paper-input": "^3.0.2",
-    "@polymer/paper-item": "^3.0.1",
-    "@polymer/paper-listbox": "^3.0.1",
-    "@polymer/paper-tooltip": "^3.0.1",
-    "@polymer/polymer": "^3.3.0",
-    "lit-element": "^2.2.0",
-    "lit-html": "^1.1.2",
-    "@doubletrade/range-datepicker": "git+https://git@github.com/roxus/range-datepicker.git#master"
+    "@doubletrade/range-datepicker": "git+https://git@github.com/roxus/range-datepicker.git#master",
+    "@polymer/iron-demo-helpers": "3.1.0",
+    "@polymer/iron-flex-layout": "3.0.1",
+    "@polymer/iron-icons": "3.0.1",
+    "@polymer/paper-dropdown-menu": "3.0.1",
+    "@polymer/paper-icon-button": "3.0.2",
+    "@polymer/paper-input": "3.0.1",
+    "@polymer/paper-item": "3.0.1",
+    "@polymer/paper-listbox": "3.0.1",
+    "@polymer/paper-tooltip": "3.0.1",
+    "@polymer/polymer": "3.2.0",
+    "lit-element": "2.1.0",
+    "lit-html": "1.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.1.0",
+    "eslint": "^6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "polymer-cli": "^1.9.10"
+    "polymer-cli": "^1.9.11"
   },
   "repository": {
     "type": "git",
