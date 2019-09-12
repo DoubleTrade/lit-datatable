@@ -130,11 +130,11 @@ class LitDatatable extends LitElement {
   firstUpdated() {
     const assignedNodes = this.shadowRoot.querySelector('slot').assignedNodes();
     this.datatableColumns = new Map(assignedNodes
-      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
-      .map((a) => [a.property, a]));
+      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+      .map(a => [a.property, a]));
     this.datatableHeaders = new Map(assignedNodes
-      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
-      .map((a) => [a.property, a]));
+      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+      .map(a => [a.property, a]));
   }
 
   renderCell(item, td, confProperty, { currentTarget }) {
@@ -180,7 +180,7 @@ class LitDatatable extends LitElement {
   }
 
   cleanEventsOfTr(item) {
-    item.events.forEach((event) => item.element.removeEventListener(event.type, event.event));
+    item.events.forEach(event => item.element.removeEventListener(event.type, event.event));
   }
 
   createEventsOfTr(tr, item) {
@@ -193,7 +193,7 @@ class LitDatatable extends LitElement {
 
   cleanTrElements() {
     [...this.table].forEach((line, lineNumber) => {
-      if (lineNumber >= (this.data.length - 1)) {
+      if (lineNumber >= (this.data.length)) {
         this.cleanEventsOfTr(line);
         this.shadowRoot.querySelector('tbody').removeChild(line.element);
         this.table.splice(lineNumber, 1);
@@ -204,7 +204,7 @@ class LitDatatable extends LitElement {
   cleanTdElements() {
     [...this.table].forEach((line, lineNumber) => {
       line.columns.forEach((column, columnNumber) => {
-        if (columnNumber >= (this.lastConfSize - 1)) {
+        if (columnNumber <= (this.lastConfSize - 1)) {
           line.element.removeChild(column);
           this.table[lineNumber].columns.splice(columnNumber, 1);
         }
@@ -219,7 +219,7 @@ class LitDatatable extends LitElement {
     }
     if (this.lastConfSize > confs.length) {
       [...this.headers].forEach((header, i) => {
-        if (i >= (this.lastConfSize - 1)) {
+        if (i <= (this.lastConfSize - 1)) {
           tr.removeChild(header);
           this.headers.splice(i, 1);
         }
@@ -236,10 +236,12 @@ class LitDatatable extends LitElement {
         if (this.stickyHeader) {
           th.classList.add('sticky');
         }
-        if (datatableHeader && datatableHeader.columnStyle) {
-          th.setAttribute('style', datatableHeader.columnStyle);
-        }
         this.headers.push(th);
+      }
+      if (datatableHeader && datatableHeader.columnStyle) {
+        th.setAttribute('style', datatableHeader.columnStyle);
+      } else {
+        th.setAttribute('style', '');
       }
       if (datatableHeader && datatableHeader.html) {
         render(datatableHeader.html(conf.header, datatableHeader.property), th);
@@ -271,12 +273,8 @@ class LitDatatable extends LitElement {
     return tr;
   }
 
-  createTd(lineIndex, property) {
-    const datatableColumn = this.datatableColumns.get(property);
+  createTd(lineIndex) {
     const td = document.createElement('td');
-    if (datatableColumn && datatableColumn.columnStyle) {
-      td.setAttribute('style', datatableColumn.columnStyle);
-    }
     this.table[lineIndex].columns.push(td);
     return td;
   }
@@ -306,8 +304,16 @@ class LitDatatable extends LitElement {
           if (this.table[lineIndex].columns[columnIndex]) {
             td = this.table[lineIndex].columns[columnIndex];
           } else {
-            td = this.createTd(lineIndex, conf.property);
+            td = this.createTd(lineIndex);
           }
+
+          const datatableColumn = this.datatableColumns.get(conf.property);
+          if (datatableColumn && datatableColumn.columnStyle) {
+            td.setAttribute('style', datatableColumn.columnStyle);
+          } else {
+            td.setAttribute('style', '');
+          }
+
           this.renderHtml(conf, lineIndex, item, td, tr);
         });
         this.shadowRoot.querySelector('tbody').appendChild(tr);
@@ -315,19 +321,25 @@ class LitDatatable extends LitElement {
     }
   }
 
+  setLoading(loading) {
+    this.dispatchEvent(new CustomEvent('loading', { detail: { value: loading } }));
+  }
+
   async generateData() {
+    this.setLoading(true);
     await this.updateComplete;
     if (this.debounceGenerate) {
       clearTimeout(this.debounceGenerate);
     }
     this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter((c) => !c.hidden);
+      const confs = [...this.conf].filter(c => !c.hidden);
       this.updateHeaders(confs);
       this.updateBody(confs);
       if (this.data !== undefined) {
         this.lastDataSize = this.data.length;
         this.lastConfSize = confs.length;
       }
+      this.setLoading(false);
     });
   }
 
