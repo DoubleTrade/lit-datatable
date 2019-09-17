@@ -192,12 +192,11 @@ class LitDatatable extends LitElement {
   }
 
   cleanTrElements() {
-    [...this.table].forEach((line, lineNumber) => {
-      if (lineNumber >= (this.data.length)) {
-        this.cleanEventsOfTr(line);
-        this.shadowRoot.querySelector('tbody').removeChild(line.element);
-        this.table.splice(lineNumber, 1);
-      }
+    const splices = this.table.splice(this.data.length);
+
+    splices.forEach(line => {
+      this.cleanEventsOfTr(line);
+      line.element.parentNode.removeChild(line.element);
     });
   }
 
