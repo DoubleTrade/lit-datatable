@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@doubletrade/range-datepicker": "git+https://git@github.com/roxus/range-datepicker.git#master",
+    "@doubletrade/range-datepicker": "0.0.32",
     "@polymer/iron-demo-helpers": "3.1.0",
     "@polymer/iron-flex-layout": "3.0.1",
     "@polymer/iron-icons": "3.0.1",
