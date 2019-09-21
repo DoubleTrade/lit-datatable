@@ -59,7 +59,7 @@ class LdHeaderWithChoices extends LitElement {
   render() {
     return html`
       <div class="layout horizontal center">
-        <paper-menu-button ignore-select dynamic-align>
+        <paper-menu-button ignore-select vertical-align="top" horizontal-align="right" no-overlap>
           <div slot="dropdown-trigger" class="layout horizontal center">
             <span class="flex layout horizontal">
               <slot></slot>
@@ -74,7 +74,7 @@ class LdHeaderWithChoices extends LitElement {
             @selected-values-changed="${this.handleChoicesChanged}"
             multi
             attr-for-selected="name">
-            ${this.choices && this.choices.map(choice => html`
+            ${this.choices && this.choices.map((choice) => html`
               <paper-icon-item name="${choice.key}">
                 <iron-icon slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></iron-icon>
                 <paper-item-body style="${choice.style}">
