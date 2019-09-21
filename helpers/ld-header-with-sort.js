@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-icons/iron-icons';
