@@ -69,8 +69,8 @@ class LdHeaderWithFilter extends Localize(LitElement) {
       content = html`
         <paper-input
           no-label-float
-          placeholder="${this.header}"
-          value="${this.filterValue}"
+          .placeholder="${this.header}"
+          .value="${this.filterValue}"
           @value-changed="${this.valueChanged.bind(this)}">
           <paper-icon-button
             id="clearBtn"
