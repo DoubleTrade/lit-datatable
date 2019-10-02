@@ -66,8 +66,8 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
       content = html`
         <paper-input
           no-label-float
-          placeholder="${this.header}"
-          value="${this.filterValue}"
+          .placeholder="${this.header}"
+          .value="${this.filterValue}"
           @value-changed="${this.valueChanged.bind(this)}">
           <paper-icon-button
             id="clearBtn"
@@ -83,7 +83,7 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
     }
     return html`
       <ld-header-with-sort
-        direction="${this.direction}"
+        .direction="${this.direction}"
         @direction-changed="${this.directionChanged.bind(this)}">
         ${content}
       </ld-header-with-sort>`;
