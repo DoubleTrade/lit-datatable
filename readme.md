@@ -43,7 +43,7 @@ const conf = [
 ```
 ## Simple example with sticky header
 ```html
-<lit-datatable ?stickyHeader="${true}" .data="${data}" .conf="${conf}"></lit-datatable>
+<lit-datatable sticky-header .data="${data}" .conf="${conf}"></lit-datatable>
 ```
 ## With HTML header
 Use native html from lit-html to render a custom header.

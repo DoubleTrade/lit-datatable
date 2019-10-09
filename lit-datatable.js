@@ -110,7 +110,7 @@ class LitDatatable extends LitElement {
       conf: { type: Array },
       table: { type: Array },
       headers: { type: Array },
-      stickyHeader: { type: Boolean },
+      stickyHeader: { type: Boolean, attribute: 'sticky-header' },
     };
   }
 
@@ -194,7 +194,7 @@ class LitDatatable extends LitElement {
   cleanTrElements() {
     const splices = this.table.splice(this.data.length);
 
-    splices.forEach(line => {
+    splices.forEach((line) => {
       this.cleanEventsOfTr(line);
       line.element.parentNode.removeChild(line.element);
     });
