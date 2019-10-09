@@ -70,11 +70,11 @@ class LdHeaderWithChoices extends LitElement {
           </div>
           <paper-listbox
             slot="dropdown-content"
-            .selected-values="${this.selectedChoices}"
+            .selectedValues="${this.selectedChoices}"
             @selected-values-changed="${this.handleChoicesChanged}"
             multi
             attr-for-selected="name">
-            ${this.choices && this.choices.map((choice) => html`
+            ${this.choices && this.choices.map(choice => html`
               <paper-icon-item name="${choice.key}">
                 <iron-icon slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></iron-icon>
                 <paper-item-body style="${choice.style}">
