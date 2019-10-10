@@ -1,6 +1,6 @@
+
 import { LitElement, html, css } from 'lit-element';
 import '@polymer/paper-menu-button/paper-menu-button';
-import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item-body';
@@ -68,21 +68,16 @@ class LdHeaderWithChoices extends LitElement {
             </span>
             <paper-icon-button icon="arrow-drop-down"></paper-icon-button>
           </div>
-          <paper-listbox
-            slot="dropdown-content"
-            .selectedValues="${this.selectedChoices}"
-            @selected-values-changed="${this.handleChoicesChanged}"
-            multi
-            attr-for-selected="name">
+          <div slot="dropdown-content">
             ${this.choices && this.choices.map(choice => html`
-              <paper-icon-item name="${choice.key}">
+              <paper-icon-item data-name="${choice.key}" @tap="${this.tapChoice.bind(this)}">
                 <iron-icon slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></iron-icon>
                 <paper-item-body style="${choice.style}">
                   ${choice.label}
                 </paper-item-body>
                 ${choice.icon ? html`<iron-icon class="choice-icon" style="${choice.iconStyle}" icon="${choice.icon}"></iron-icon>` : null}
               </paper-icon-item>`)}
-          </paper-listbox>
+          </div>
         </paper-menu-button>
       </div>
   `;
@@ -93,6 +88,11 @@ class LdHeaderWithChoices extends LitElement {
       choices: { type: Array },
       selectedChoices: { type: Array },
     };
+  }
+
+  constructor() {
+    super();
+    this.selectedChoices = [];
   }
 
   computeIconName(choice, selectedChoices) {
@@ -106,10 +106,20 @@ class LdHeaderWithChoices extends LitElement {
     return selectedChoices.length > 0 ? ` (${selectedChoices.length})` : '';
   }
 
-  handleChoicesChanged({ currentTarget }) {
-    this.selectedChoices = currentTarget.selectedValues;
+  tapChoice({ currentTarget }) {
+    const { name } = currentTarget.dataset;
+    const selectedChoices = [...this.selectedChoices];
+    const indexOfChoice = selectedChoices.indexOf(name);
+    if (indexOfChoice === -1) {
+      selectedChoices.push(name);
+    } else {
+      selectedChoices.splice(indexOfChoice);
+    }
     this.shadowRoot.querySelector('paper-menu-button').close();
-    this.dispatchEvent(new CustomEvent('selected-choices-changed', { detail: { value: this.selectedChoices } }));
+    this.dispatchEvent(new CustomEvent(
+      'selected-choices-changed',
+      { detail: { value: selectedChoices } },
+    ));
   }
 }
 

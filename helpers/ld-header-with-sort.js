@@ -42,7 +42,7 @@ class LdHeaderWithSort extends Localize(LitElement) {
           <slot></slot>
         </div>
         <slot name="actions"></slot>
-        <paper-icon-button id="sortBtn" icon="arrow-downward" @tap="${this.handleSort.bind(this)}" .class="${this.direction}"></paper-icon-button>
+        <paper-icon-button id="sortBtn" icon="arrow-downward" @tap="${this.handleSort.bind(this)}" class="${this.direction}"></paper-icon-button>
         <paper-tooltip for="sortBtn">${this.getTooltipText(this.direction)}<paper-tooltip>
       </div>
   `;
