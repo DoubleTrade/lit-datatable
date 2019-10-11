@@ -125,6 +125,10 @@ class LitDatatable extends LitElement {
     if (properties.has('data') || properties.has('conf')) {
       this.generateData();
     }
+    if (properties.has('conf')) {
+      const confs = [...this.conf].filter(c => !c.hidden);
+      this.updateHeaders(confs);
+    }
   }
 
   firstUpdated() {
@@ -150,12 +154,12 @@ class LitDatatable extends LitElement {
     }
   }
 
-  setEventListener(datatableColumn, lineIndex, item, td, property) {
+  setEventListener(datatableColumn, lineIndex, item, td, property, renderer) {
     if (datatableColumn) {
       if (datatableColumn.eventsForDom[lineIndex]) {
         datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
       }
-      datatableColumn.eventsForDom[lineIndex] = this.renderCell.bind(this, item, td, property);
+      datatableColumn.eventsForDom[lineIndex] = renderer;
       datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
     }
   }
@@ -174,7 +178,8 @@ class LitDatatable extends LitElement {
   renderHtml(conf, lineIndex, item, td, tr) {
     const { property } = conf;
     const datatableColumn = this.datatableColumns.get(property);
-    this.setEventListener(datatableColumn, lineIndex, item, td, property);
+    this.setEventListener(datatableColumn, lineIndex, item, td, property,
+      this.renderCell.bind(this, item, td, property));
     this.renderCell(item, td, property, { currentTarget: datatableColumn });
     tr.appendChild(td);
   }
@@ -244,6 +249,8 @@ class LitDatatable extends LitElement {
       }
       if (datatableHeader && datatableHeader.html) {
         render(datatableHeader.html(conf.header, datatableHeader.property), th);
+        this.setEventListener(datatableHeader, 0, null, th, property,
+          () => render(datatableHeader.html(conf.header, datatableHeader.property), th));
       } else {
         render(conf.header, th);
       }
@@ -332,7 +339,6 @@ class LitDatatable extends LitElement {
     }
     this.debounceGenerate = setTimeout(() => {
       const confs = [...this.conf].filter(c => !c.hidden);
-      this.updateHeaders(confs);
       this.updateBody(confs);
       if (this.data !== undefined) {
         this.lastDataSize = this.data.length;
