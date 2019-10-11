@@ -113,9 +113,8 @@ class LdHeaderWithChoices extends LitElement {
     if (indexOfChoice === -1) {
       selectedChoices.push(name);
     } else {
-      selectedChoices.splice(indexOfChoice);
+      selectedChoices.splice(indexOfChoice, 1);
     }
-    this.shadowRoot.querySelector('paper-menu-button').close();
     this.dispatchEvent(new CustomEvent(
       'selected-choices-changed',
       { detail: { value: selectedChoices } },
