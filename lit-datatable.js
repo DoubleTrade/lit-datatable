@@ -248,9 +248,14 @@ class LitDatatable extends LitElement {
         th.setAttribute('style', '');
       }
       if (datatableHeader && datatableHeader.html) {
+        th.dataset.property = property;
         render(datatableHeader.html(conf.header, datatableHeader.property), th);
         this.setEventListener(datatableHeader, 0, null, th, property,
-          () => render(datatableHeader.html(conf.header, datatableHeader.property), th));
+          () => {
+            if (th.dataset.property === datatableHeader.property) {
+              render(datatableHeader.html(conf.header, datatableHeader.property), th);
+            }
+          });
       } else {
         render(conf.header, th);
       }
