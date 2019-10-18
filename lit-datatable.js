@@ -205,13 +205,12 @@ class LitDatatable extends LitElement {
     });
   }
 
-  cleanTdElements() {
-    [...this.table].forEach((line, lineNumber) => {
-      line.columns.forEach((column, columnNumber) => {
-        if (columnNumber <= (this.lastConfSize - 1)) {
-          line.element.removeChild(column);
-          this.table[lineNumber].columns.splice(columnNumber, 1);
-        }
+  cleanTdElements(confs) {
+    [...this.table].forEach(line => {
+      const splicedColumns = line.columns.splice(confs.length);
+
+      splicedColumns.forEach(column => {
+        line.element.removeChild(column);
       });
     });
   }
@@ -293,7 +292,7 @@ class LitDatatable extends LitElement {
   updateBody(confs) {
     if (this.data !== undefined) {
       if (this.lastConfSize > confs.length) {
-        this.cleanTdElements();
+        this.cleanTdElements(confs);
       }
       if (this.lastDataSize > this.data.length) {
         this.cleanTrElements();
