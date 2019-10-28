@@ -72,13 +72,13 @@ class LitDatatableFooter extends Localize(LitElement) {
               </div>
             </div>
             <div class="status">
-              ${this.computeCurrentSize(this.page, this.size)}-${this.computeCurrentMaxSize(this.page, this.size, this.totalElements)}
+              ${this.computeCurrentSize(this.page, this.size, this.totalElements)}-${this.computeCurrentMaxSize(this.page, this.size, this.totalElements)}
               ${this.localize('of')}
               ${this.totalElements}
             </div>
-            <paper-icon-button id="previousPageBtn" icon="chevron-left" ?disabled="${this.prevButtonDisabled(this.page)}" @tap="${this.prevPage}"></paper-icon-button>
+            <paper-icon-button id="previousPageBtn" icon="chevron-left" .disabled="${this.prevButtonDisabled(this.page)}" @tap="${this.prevPage}"></paper-icon-button>
             <paper-tooltip for="previousPageBtn" position="top">${this.localize('previousPage')}</paper-tooltip>
-            <paper-icon-button id="nextPageBtn" icon="chevron-right" ?disabled="${this.nextButtonDisabled(this.page, this.totalPages)}" @tap="${this.nextPage}"></paper-icon-button>
+            <paper-icon-button id="nextPageBtn" icon="chevron-right" .disabled="${this.nextButtonDisabled(this.page, this.totalPages)}" @tap="${this.nextPage}"></paper-icon-button>
             <paper-tooltip for="nextPageBtn" position="top">${this.localize('nextPage')}</paper-tooltip>
           </div>
         </div>
@@ -145,8 +145,11 @@ class LitDatatableFooter extends Localize(LitElement) {
     };
   }
 
-  computeCurrentSize(page, size) {
-    return (page * size) + 1;
+  computeCurrentSize(page, size, totalElements) {
+    if (totalElements) {
+      return (page * size) + 1;
+    }
+    return 0;
   }
 
   computeCurrentMaxSize(page, size, totalElements) {
@@ -169,7 +172,7 @@ class LitDatatableFooter extends Localize(LitElement) {
   }
 
   nextButtonDisabled(page, totalPages) {
-    return page + 1 === totalPages;
+    return totalPages === 0 || page + 1 === totalPages;
   }
 
   prevButtonDisabled(page) {
