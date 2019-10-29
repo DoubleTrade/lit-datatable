@@ -55,7 +55,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
       </style>
         <dom-if if="[[active]]">
           <template>
-            <ld-header-with-sort direction="{{direction}}">
+            <ld-header-with-sort direction="{{direction}}" language="[[language]]">
               <div class="layout horizontal center">
                 <range-datepicker-input
                   no-range="[[noRange]]"
@@ -77,7 +77,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
         </dom-if>
         <dom-if if="[[!active]]">
           <template>
-            <ld-header-with-sort direction="{{direction}}">
+            <ld-header-with-sort direction="{{direction}}" language="[[language]]">
               <div on-tap="toggleActive">
                 [[header]]
               </div>
@@ -93,6 +93,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
   static get properties() {
     return {
       header: String,
+      language: String,
       direction: {
         type: String,
         notify: true,

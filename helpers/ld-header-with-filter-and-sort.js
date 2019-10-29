@@ -84,6 +84,7 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
     return html`
       <ld-header-with-sort
         .direction="${this.direction}"
+        .language="${this.language}"
         @direction-changed="${this.directionChanged.bind(this)}">
         ${content}
       </ld-header-with-sort>`;
