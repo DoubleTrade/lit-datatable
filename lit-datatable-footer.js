@@ -157,17 +157,21 @@ class LitDatatableFooter extends Localize(LitElement) {
     return maxSize > totalElements ? totalElements : maxSize;
   }
 
+  launchEvent() {
+    this.dispatchEvent(new CustomEvent('page-or-size-changed', { detail: {page:this.page, size: this.size} }));
+  }
+
   nextPage() {
     if (this.page + 1 < this.totalPages) {
       this.page = this.page + 1;
-      this.dispatchEvent(new CustomEvent('page-changed', { detail: this.page }));
+      this.launchEvent();
     }
   }
 
   prevPage() {
     if (this.page > 0) {
       this.page = this.page - 1;
-      this.dispatchEvent(new CustomEvent('page-changed', { detail: this.page }));
+      this.launchEvent();
     }
   }
 
@@ -186,8 +190,7 @@ class LitDatatableFooter extends Localize(LitElement) {
       if (newSize !== this.size) {
         this.page = 0;
         this.size = parseInt(newSize, 10);
-        this.dispatchEvent(new CustomEvent('page-changed', { detail: this.page }));
-        this.dispatchEvent(new CustomEvent('size-changed', { detail: this.size }));
+        this.launchEvent();
       }
     }
   }
