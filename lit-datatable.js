@@ -189,8 +189,10 @@ class LitDatatable extends LitElement {
   }
 
   createEventsOfTr(tr, item) {
+    const trTapEvent = this.trTap.bind(this, item);
     const trOverEvent = this.trHover.bind(this, item);
     const trOutEvent = this.trOut.bind(this, item);
+    tr.addEventListener('tap', trTapEvent);
     tr.addEventListener('mouseover', trOverEvent);
     tr.addEventListener('mouseout', trOutEvent);
     return [{ type: 'mouseover', event: trOverEvent }, { type: 'mouseout', event: trOutEvent }];
@@ -265,6 +267,10 @@ class LitDatatable extends LitElement {
 
   trCreated(tr, lineIndex, item) {
     this.dispatchEvent(new CustomEvent('tr-create', { detail: { tr, lineIndex, item } }));
+  }
+
+  trTap(item) {
+    this.dispatchEvent(new CustomEvent('tap-tr', { detail: item }));
   }
 
   trHover(item) {
