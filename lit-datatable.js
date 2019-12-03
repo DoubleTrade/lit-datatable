@@ -137,7 +137,7 @@ class LitDatatable extends LitElement {
   }
 
   updateSortHeaders() {
-    if (this.sort) {
+    if (this.sort !== undefined && this.sort !== null) {
       this.datatableHeaders.forEach(d => d.sort = this.sort);
     }
   }
@@ -271,7 +271,7 @@ class LitDatatable extends LitElement {
           if (datatableHeader.sortEvent) {
             datatableHeader.removeEventListener('sort', datatableHeader.sortEvent);
           }
-          datatableHeader.sortEvent = this.dispathSortEvent.bind(this);
+          datatableHeader.sortEvent = this.dispatchSortEvent.bind(this);
           datatableHeader.addEventListener('sort', datatableHeader.sortEvent);
         }
       }
@@ -285,7 +285,7 @@ class LitDatatable extends LitElement {
     this.shadowRoot.querySelector('thead').appendChild(tr);
   }
 
-  dispathSortEvent({detail}) {
+  dispatchSortEvent({detail}) {
     this.dispatchEvent(new CustomEvent('sort', { detail }));
   }
 
