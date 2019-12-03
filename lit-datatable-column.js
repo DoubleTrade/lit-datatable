@@ -47,7 +47,6 @@ class LitDatatableColumn extends LitElement {
     if (properties.has('type') || properties.has('sort')) {
       if (this.type === 'sort') {
         this.html = (value, property) => html`
-          ${console.log(this.sort, property, this._getSortDirection(this.sort, property))}
           <ld-header-with-sort
             .language="${this.language}"
             data-property="${property}"
@@ -74,7 +73,6 @@ class LitDatatableColumn extends LitElement {
   _handleSortDirectionChanged({ currentTarget, detail }) {
     const splittedSort = this.sort.split(',');
     let sort;
-    console.log('sortDirectionChanged')
     if (detail.value) {
       this.sort = `${currentTarget.dataset.property},${detail.value}`;
       this.dispatchEvent(new CustomEvent('sort', {detail: {value: this.sort}}));
