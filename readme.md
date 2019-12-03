@@ -83,8 +83,20 @@ A footer is available to catch size and page changed in order to relaunch the re
   language="en">
 </lit-datatable-footer>
 ```
+
+
 ## With HTML data and sorter
-A sorter is available in helpers.
+A default sorter is available, set a header column without html and type `sort`. 
+The sort must be of the following form : `property,direction`, ex: `fruit,asc`.
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @sort="${this._sortChanged}" .sort="${sort}">
+  <lit-datatable-column header="${true}" property="fruit" type="sort"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
+```
+
+## With HTML data and custom sorter
+You can use a specific sorter is available in helpers.
 ```js
 const sort = key => (value, property) => html`
   <ld-header-with-sort

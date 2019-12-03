@@ -109,6 +109,7 @@ class LitDatatable extends LitElement {
       data: { type: Array },
       conf: { type: Array },
       table: { type: Array },
+      sort: { type: String },
       headers: { type: Array },
       stickyHeader: { type: Boolean, attribute: 'sticky-header' },
     };
@@ -128,6 +129,16 @@ class LitDatatable extends LitElement {
     if (properties.has('conf')) {
       const confs = [...this.conf].filter(c => !c.hidden);
       this.updateHeaders(confs);
+    }
+
+    if (properties.has('sort')) {
+      this.updateSortHeaders();
+    }
+  }
+
+  updateSortHeaders() {
+    if (this.sort) {
+      this.datatableHeaders.forEach(d => d.sort = this.sort);
     }
   }
 
@@ -248,21 +259,34 @@ class LitDatatable extends LitElement {
       } else {
         th.setAttribute('style', '');
       }
-      if (datatableHeader && datatableHeader.html) {
+      if (datatableHeader) {
         th.dataset.property = property;
-        render(datatableHeader.html(conf.header, datatableHeader.property), th);
         this.setEventListener(datatableHeader, 0, null, th, property,
           () => {
             if (th.dataset.property === datatableHeader.property) {
               render(datatableHeader.html(conf.header, datatableHeader.property), th);
             }
           });
+        if (datatableHeader.type === 'sort') {
+          if (datatableHeader.sortEvent) {
+            datatableHeader.removeEventListener('sort', datatableHeader.sortEvent);
+          }
+          datatableHeader.sortEvent = this.dispathSortEvent.bind(this);
+          datatableHeader.addEventListener('sort', datatableHeader.sortEvent);
+        }
+      }
+      if (datatableHeader && datatableHeader.html) {
+        render(datatableHeader.html(conf.header, datatableHeader.property), th);
       } else {
         render(conf.header, th);
       }
       tr.appendChild(th);
     });
     this.shadowRoot.querySelector('thead').appendChild(tr);
+  }
+
+  dispathSortEvent({detail}) {
+    this.dispatchEvent(new CustomEvent('sort', { detail }));
   }
 
   trCreated(tr, lineIndex, item) {
