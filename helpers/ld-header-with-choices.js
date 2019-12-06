@@ -59,7 +59,7 @@ class LdHeaderWithChoices extends LitElement {
   render() {
     return html`
       <div class="layout horizontal center">
-        <paper-menu-button ignore-select vertical-align="top" dynamic-align no-overlap>
+        <paper-menu-button ignoreSelect verticalAlign="top" dynamicAlign noOverlap verticalOffset="10">
           <div slot="dropdown-trigger" class="layout horizontal center">
             <span class="flex layout horizontal">
               <slot></slot>
@@ -87,6 +87,7 @@ class LdHeaderWithChoices extends LitElement {
     return {
       choices: { type: Array },
       selectedChoices: { type: Array },
+      property: { type: String },
     };
   }
 
@@ -117,7 +118,7 @@ class LdHeaderWithChoices extends LitElement {
     }
     this.dispatchEvent(new CustomEvent(
       'selected-choices-changed',
-      { detail: { value: selectedChoices } },
+      { detail: { value: selectedChoices, property: this.property } },
     ));
   }
 }

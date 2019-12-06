@@ -53,47 +53,48 @@ class LdHeaderWithDateAndSort extends PolymerElement {
           }
         }
       </style>
-        <dom-if if="[[active]]">
-          <template>
-            <ld-header-with-sort direction="{{direction}}" language="[[language]]">
-              <div class="layout horizontal center">
-                <range-datepicker-input
-                  no-range="[[noRange]]"
-                  horizontal-align="[[horizontalAlign]]"
-                  date-format="[[dateFormat]]"
-                  locale="[[locale]]"
-                  date-from="{{dateFrom}}"
-                  date-to="{{dateTo}}"
-                  force-narrow>
-                  <template>
-                    <paper-input no-label-float placeholder="[[header]]" value="[[computeDate(dateFrom, dateTo, noRange)]]" readonly>
-                    </paper-input>
-                  </template>
-                </range-datepicker-input>
-                <paper-icon-button icon="clear" on-tap="clearDate"></paper-icon-button>
-              </div>
-            </ld-header-with-sort>
-          </template>
-        </dom-if>
-        <dom-if if="[[!active]]">
-          <template>
-            <ld-header-with-sort direction="{{direction}}" language="[[language]]">
-              <div on-tap="toggleActive">
-                [[header]]
-              </div>
-              <div slot="actions">
-                <paper-icon-button icon="search" on-tap="toggleActive"></paper-icon-button>
-              </div>
-            </ld-header-with-sort>
-          </template>
-        </dom-if>
+      <dom-if if="[[active]]">
+        <template>
+          <ld-header-with-sort direction="{{direction}}" language="[[language]]">
+            <div class="layout horizontal center">
+              <range-datepicker-input
+                no-range="[[noRange]]"
+                horizontal-align="[[horizontalAlign]]"
+                date-format="[[dateFormat]]"
+                locale="[[locale]]"
+                date-from="{{dateFrom}}"
+                date-to="{{dateTo}}"
+                force-narrow>
+                <template>
+                  <paper-input no-label-float placeholder="[[header]]" value="[[computeDate(dateFrom, dateTo, noRange)]]" readonly>
+                  </paper-input>
+                </template>
+              </range-datepicker-input>
+              <paper-icon-button icon="clear" on-tap="clearDate"></paper-icon-button>
+            </div>
+          </ld-header-with-sort>
+        </template>
+      </dom-if>
+      <dom-if if="[[!active]]">
+        <template>
+          <ld-header-with-sort direction="{{direction}}" language="[[language]]">
+            <div on-tap="toggleActive">
+              [[header]]
+            </div>
+            <div slot="actions">
+              <paper-icon-button icon="search" on-tap="toggleActive"></paper-icon-button>
+            </div>
+          </ld-header-with-sort>
+        </template>
+      </dom-if>
   `;
   }
 
   static get properties() {
     return {
-      header: String,
-      language: String,
+      header: { type: String },
+      language: { type: String },
+      dateFormat: { type: String },
       direction: {
         type: String,
         notify: true,

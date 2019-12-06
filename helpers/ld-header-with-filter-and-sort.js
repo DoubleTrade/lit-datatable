@@ -124,22 +124,13 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
 
   static get properties() {
     return {
-      header: String,
-      direction: {
-        type: String,
-      },
-      active: {
-        type: Boolean,
-      },
-      filterValue: {
-        type: String,
-      },
-      language: {
-        type: String,
-      },
-      resources: {
-        type: Object,
-      },
+      header: { type: String },
+      direction: { type: String },
+      active: { type: Boolean },
+      filterValue: { type: String },
+      language: { type: String },
+      resources: { type: Object },
+      property: { type: String },
     };
   }
 
@@ -174,7 +165,7 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
   }
 
   dispatchFilterEvent() {
-    this.dispatchEvent(new CustomEvent('filter-value-changed', { detail: { value: this.filterValue } }));
+    this.dispatchEvent(new CustomEvent('filter-value-changed', { detail: { value: this.filterValue, property: this.property } }));
   }
 }
 

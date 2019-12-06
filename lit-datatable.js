@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-
 import { render } from 'lit-html';
 
 class LitDatatable extends LitElement {
@@ -138,7 +137,7 @@ class LitDatatable extends LitElement {
 
   updateSortHeaders() {
     if (this.sort !== undefined && this.sort !== null) {
-      this.datatableHeaders.forEach(d => d.sort = this.sort);
+      this.datatableHeaders.forEach((d) => { d.sort = this.sort; });
     }
   }
 
@@ -219,10 +218,10 @@ class LitDatatable extends LitElement {
   }
 
   cleanTdElements(confs) {
-    [...this.table].forEach(line => {
+    [...this.table].forEach((line) => {
       const splicedColumns = line.columns.splice(confs.length);
 
-      splicedColumns.forEach(column => {
+      splicedColumns.forEach((column) => {
         line.element.removeChild(column);
       });
     });
@@ -267,11 +266,37 @@ class LitDatatable extends LitElement {
               render(datatableHeader.html(conf.header, datatableHeader.property), th);
             }
           });
-        if (datatableHeader.type === 'sort') {
+        if (datatableHeader.type === 'sort' || datatableHeader.type === 'filterSort') {
           if (datatableHeader.sortEvent) {
             datatableHeader.removeEventListener('sort', datatableHeader.sortEvent);
           }
-          datatableHeader.sortEvent = this.dispatchSortEvent.bind(this);
+          datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
+          datatableHeader.addEventListener('sort', datatableHeader.sortEvent);
+        }
+        if (datatableHeader.type === 'filter' || datatableHeader.type === 'filterSort') {
+          if (datatableHeader.filterEvent) {
+            datatableHeader.removeEventListener('filter', datatableHeader.filterEvent);
+          }
+          datatableHeader.filterEvent = this.dispatchCustomEvent.bind(this, 'filter');
+          datatableHeader.addEventListener('filter', datatableHeader.filterEvent);
+        }
+        if (datatableHeader.type === 'choices') {
+          if (datatableHeader.choicesEvent) {
+            datatableHeader.removeEventListener('choices', datatableHeader.choicesEvent);
+          }
+          datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices');
+          datatableHeader.addEventListener('choices', datatableHeader.choicesEvent);
+        }
+        if (datatableHeader.type === 'dateSort') {
+          if (datatableHeader.dateSortEvent) {
+            datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent);
+          }
+          datatableHeader.dateSortEvent = this.dispatchCustomEvent.bind(this, 'dates');
+          datatableHeader.addEventListener('dates', datatableHeader.dateSortEvent);
+          if (datatableHeader.sortEvent) {
+            datatableHeader.removeEventListener('sort', datatableHeader.sortEvent);
+          }
+          datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
           datatableHeader.addEventListener('sort', datatableHeader.sortEvent);
         }
       }
@@ -285,8 +310,8 @@ class LitDatatable extends LitElement {
     this.shadowRoot.querySelector('thead').appendChild(tr);
   }
 
-  dispatchSortEvent({detail}) {
-    this.dispatchEvent(new CustomEvent('sort', { detail }));
+  dispatchCustomEvent(key, { detail }) {
+    this.dispatchEvent(new CustomEvent(key, { detail }));
   }
 
   trCreated(tr, lineIndex, item) {

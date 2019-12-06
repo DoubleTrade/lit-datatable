@@ -18,35 +18,12 @@ class LdHeaderWithFilter extends Localize(LitElement) {
 
       paper-input {
         min-width: var(--paper-datatable-api-min-width-input-filter, 120px);
-        --paper-input-container-underline-focus: {
-          display: block;
-        }
-        ;
-        --paper-input-container-label: {
-          position: initial;
-        }
-        ;
-        --paper-input-container: {
-          padding: 0;
-        }
-        ;
-        --paper-input-container-input: {
-          font-size: 12px;
-        }
-        ;
       }
 
       paper-icon-button {
         padding: 0;
         width: 24px;
         height: 24px;
-        --paper-icon-button: {
-          color: var(--paper-icon-button-color);
-        }
-
-        --paper-icon-button-hover: {
-          color: var(--paper-icon-button-color-hover);
-        }
       }
 
       .header {
@@ -67,6 +44,32 @@ class LdHeaderWithFilter extends Localize(LitElement) {
     `;
     if (this.active) {
       content = html`
+        <style>
+          paper-input {
+            --paper-input-container-underline-focus: {
+              display: block;
+            };
+            --paper-input-container-label: {
+              position: initial;
+            };
+            --paper-input-container: {
+              padding: 0;
+            };
+            --paper-input-container-input: {
+              font-size: 7px;
+            };
+          }
+
+          paper-icon-button {
+            --paper-icon-button: {
+              color: var(--paper-icon-button-color);
+            }
+
+            --paper-icon-button-hover: {
+              color: var(--paper-icon-button-color-hover);
+            }
+          }
+        </style>
         <paper-input
           no-label-float
           .placeholder="${this.header}"
@@ -121,22 +124,13 @@ class LdHeaderWithFilter extends Localize(LitElement) {
 
   static get properties() {
     return {
-      header: String,
-      direction: {
-        type: String,
-      },
-      active: {
-        type: Boolean,
-      },
-      filterValue: {
-        type: String,
-      },
-      language: {
-        type: String,
-      },
-      resources: {
-        type: Object,
-      },
+      header: { type: String },
+      direction: { type: String },
+      active: { type: Boolean },
+      filterValue: { type: String },
+      language: { type: String },
+      resources: { type: Object },
+      property: { type: String },
     };
   }
 
@@ -171,7 +165,7 @@ class LdHeaderWithFilter extends Localize(LitElement) {
   }
 
   dispatchFilterEvent() {
-    this.dispatchEvent(new CustomEvent('filter-value-changed', { detail: { value: this.filterValue } }));
+    this.dispatchEvent(new CustomEvent('filter-value-changed', { detail: { value: this.filterValue, property: this.property } }));
   }
 }
 

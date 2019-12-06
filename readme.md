@@ -83,8 +83,6 @@ A footer is available to catch size and page changed in order to relaunch the re
   language="en">
 </lit-datatable-footer>
 ```
-
-
 ## With HTML data and sorter
 A default sorter is available, set a header column without html and type `sort`. 
 The sort must be of the following form : `property,direction`, ex: `fruit,asc`.
@@ -94,7 +92,6 @@ The sort must be of the following form : `property,direction`, ex: `fruit,asc`.
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
 </lit-datatable>
 ```
-
 ## With HTML data and custom sorter
 You can use a specific sorter is available in helpers.
 ```js
@@ -102,7 +99,7 @@ const sort = key => (value, property) => html`
   <ld-header-with-sort
     language="en"
     data-property="${property}"
-    @direction-changed="${this._handleSortDirectionChanged.bind(this)}"
+    @direction-changed="${this.handleSortChanged.bind(this)}"
     direction="${this._getSortDirection(this.sort, key)}">
     ${value}
   </ld-header-with-sort>`;
@@ -116,4 +113,37 @@ const sort = key => (value, property) => html`
 ## Custom style on a td
 ```html
 <lit-datatable-column column="${true}" property="fruit" columnStyle="padding: 0; min-width: initial;"></lit-datatable-column>
+```
+
+## With HTML data and filter
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @filter="${this.filterChanged}">
+  <lit-datatable-column header="${true}" property="fruit" type="filter" .filterValue="${this.filter}"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
+```
+
+## With HTML data, sort and filter
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @filter="${this.filterChanged}".sort="${this.sort}" @sort="${this.sortChanged}">
+  <lit-datatable-column header="${true}" property="fruit" type="filterSort" .filterValue="${this.filter}"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
+```
+
+## With HTML data and choices filter
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @choices="${this.choicesChanged}">
+  <lit-datatable-column header="${true}" property="fruit" type="choices" .choices="${this.availableChoices}" .selectedChoices="${this.choices}"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
+```
+
+## With HTML data and date filter
+The format of startDate and endDate is a timestamp.
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @dates="${this.datesChanged}">
+  <lit-datatable-column header="${true}" property="fruit" type="dateSort" .start="${this.startDate}" .end="${this.endDate}"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
 ```
