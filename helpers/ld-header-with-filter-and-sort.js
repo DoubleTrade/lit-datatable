@@ -36,9 +36,6 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
       }
 
       paper-icon-button {
-        padding: 0;
-        width: 24px;
-        height: 24px;
         --paper-icon-button: {
           color: var(--paper-icon-button-color);
         }
