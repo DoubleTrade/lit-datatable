@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import './helpers/ld-header-with-sort';
 import './helpers/ld-header-with-filter';
 import './helpers/ld-header-with-date-and-sort';
+import './helpers/ld-header-with-filter-and-sort';
 import './helpers/ld-header-with-choices';
 
 class LitDatatableColumn extends LitElement {
@@ -104,6 +105,7 @@ class LitDatatableColumn extends LitElement {
             horizontal-align="left"
             dateFormat="dd/MM/yyyy"
             data-property="${property}"
+            .property="${property}"
             @direction-changed="${this.handleSortDirectionChanged.bind(this)}"
             .direction="${this.getSortDirection(this.sort, property)}"
             .locale="${this.language}"
