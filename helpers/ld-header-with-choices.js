@@ -59,7 +59,7 @@ class LdHeaderWithChoices extends LitElement {
   render() {
     return html`
       <div class="layout horizontal center">
-        <paper-menu-button ignoreSelect verticalAlign="top" dynamicAlign noOverlap verticalOffset="10">
+        <paper-menu-button ignoreSelect verticalAlign="top" dynamicAlign noOverlap vertical-offset="50">
           <div slot="dropdown-trigger" class="layout horizontal center">
             <span class="flex layout horizontal">
               <slot></slot>
