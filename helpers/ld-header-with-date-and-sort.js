@@ -121,6 +121,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
         type: String,
         value: 'right',
       },
+      property: { type: String },
     };
   }
 
@@ -130,6 +131,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
         detail: {
           dateFrom: parseInt(this.dateFrom, 10),
           dateTo: parseInt(dateTo, 10),
+          property: this.property,
         },
       }));
     }
@@ -140,6 +142,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
       this.dispatchEvent(new CustomEvent('filter', {
         detail: {
           dateFrom: parseInt(dateFrom, 10),
+          property: this.property,
         },
       }));
     }
@@ -177,6 +180,7 @@ class LdHeaderWithDateAndSort extends PolymerElement {
       detail: {
         dateFrom: null,
         dateTo: null,
+        property: this.property,
       },
     }));
   }
