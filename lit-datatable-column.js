@@ -43,6 +43,7 @@ class LitDatatableColumn extends LitElement {
       selectedChoices: { type: Array },
       start: { type: String },
       end: { type: String },
+      horizontalAlign: { type: String },
     };
   }
 
@@ -50,6 +51,7 @@ class LitDatatableColumn extends LitElement {
     super();
     this.eventsForDom = [];
     this.sort = '';
+    this.horizontalAlign = 'left';
   }
 
   updated(properties) {
@@ -102,7 +104,7 @@ class LitDatatableColumn extends LitElement {
       if (this.type === 'dateSort') {
         this.html = (value, property) => html`
           <ld-header-with-date-and-sort
-            horizontal-align="left"
+            .horizontalAlign="${this.horizontalAlign}"
             dateFormat="dd/MM/yyyy"
             data-property="${property}"
             .property="${property}"
