@@ -24,7 +24,7 @@
     "@polymer/paper-menu-button": "3.0.1",
     "@polymer/paper-tooltip": "3.0.1",
     "@polymer/polymer": "3.2.0",
-    "lit-element": "2.1.0",
+    "lit-element": "2.x",
     "lit-html": "1.1.2"
   },
   "devDependencies": {
