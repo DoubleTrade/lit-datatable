@@ -5,7 +5,7 @@ import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item-body';
 import '@polymer/iron-icons/iron-icons';
-import '@polymer/iron-icon/iron-icon';
+import '@polymer/paper-icon-button';
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from '../iron-flex-import';
 import './ld-header-with-sort';
 
@@ -24,11 +24,11 @@ class LdHeaderWithChoices extends LitElement {
         padding: 0;
       }
 
-      iron-icon[icon="check-box"] {
+      paper-icon-button[icon="check-box"] {
         color: var(--paper-datatable-api-checked-checkbox-color, --primary-color);
       }
 
-      iron-icon[icon="check-box-outline-blank"] {
+      paper-icon-button[icon="check-box-outline-blank"] {
         color: var(--paper-datatable-api-unchecked-checkbox-color, --primary-text-color);
       }
 
@@ -71,7 +71,7 @@ class LdHeaderWithChoices extends LitElement {
           <div slot="dropdown-content">
             ${this.choices && this.choices.map(choice => html`
               <paper-icon-item data-name="${choice.key}" @tap="${this.tapChoice.bind(this)}">
-                <iron-icon slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></iron-icon>
+                <paper-icon-button slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></paper-icon-button>
                 <paper-item-body style="${choice.style}">
                   ${choice.label}
                 </paper-item-body>
