@@ -126,7 +126,7 @@ class LitDatatable extends LitElement {
       this.generateData();
     }
     if (properties.has('conf')) {
-      const confs = [...this.conf].filter(c => !c.hidden);
+      const confs = [...this.conf].filter((c) => !c.hidden);
       this.updateHeaders(confs);
     }
 
@@ -144,11 +144,11 @@ class LitDatatable extends LitElement {
   firstUpdated() {
     const assignedNodes = this.shadowRoot.querySelector('slot').assignedNodes();
     this.datatableColumns = new Map(assignedNodes
-      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+      .map((a) => [a.property, a]));
     this.datatableHeaders = new Map(assignedNodes
-      .filter(a => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
-      .map(a => [a.property, a]));
+      .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+      .map((a) => [a.property, a]));
   }
 
   renderCell(item, td, confProperty, { currentTarget }) {
@@ -195,7 +195,7 @@ class LitDatatable extends LitElement {
   }
 
   cleanEventsOfTr(item) {
-    item.events.forEach(event => item.element.removeEventListener(event.type, event.event));
+    item.events.forEach((event) => item.element.removeEventListener(event.type, event.event));
   }
 
   createEventsOfTr(tr, item) {
@@ -287,7 +287,7 @@ class LitDatatable extends LitElement {
           datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices');
           datatableHeader.addEventListener('choices', datatableHeader.choicesEvent);
         }
-        if (datatableHeader.type === 'dateSort') {
+        if (datatableHeader.type === 'dateSort' || datatableHeader.type === 'dateSortNoRange') {
           if (datatableHeader.dateSortEvent) {
             datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent);
           }
@@ -397,7 +397,7 @@ class LitDatatable extends LitElement {
       clearTimeout(this.debounceGenerate);
     }
     this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter(c => !c.hidden);
+      const confs = [...this.conf].filter((c) => !c.hidden);
       this.updateBody(confs);
       if (this.data !== undefined) {
         this.lastDataSize = this.data.length;

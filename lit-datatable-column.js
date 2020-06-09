@@ -118,6 +118,24 @@ class LitDatatableColumn extends LitElement {
             .header="${value}"
             @filter="${this.dateChanged.bind(this)}">
           </ld-header-with-date-and-sort>`;
+      } else if (this.type === 'dateSortNoRange') {
+        this.html = (value, property) => html`
+          <ld-header-with-date-and-sort
+            .horizontalAlign="${this.horizontalAlign}"
+            dateFormat="dd/MM/yyyy"
+            data-property="${property}"
+            .property="${property}"
+            @direction-changed="${this.handleSortDirectionChanged.bind(this)}"
+            .direction="${this.getSortDirection(this.sort, property)}"
+            .locale="${this.language}"
+            .language="${this.language}"
+            .active="${this.start}"
+            .dateFrom="${this.start}"
+            .dateTo="${this.end}"
+            .header="${value}"
+            .noRange="${true}"
+            @filter="${this.dateChanged.bind(this)}">
+          </ld-header-with-date-and-sort>`;
       }
     }
     if (properties.has('type') || properties.has('sort') || properties.has('filterValue')) {
