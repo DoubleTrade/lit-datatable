@@ -1,5 +1,6 @@
-import { LitElement, html, css } from 'lit-element';
-import { render } from 'lit-html';
+import {
+  LitElement, html, css, render,
+} from 'lit-element';
 
 class LitDatatable extends LitElement {
   static get styles() {
