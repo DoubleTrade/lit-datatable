@@ -2,7 +2,7 @@ import {
   LitElement, html, css
 } from 'lit-element';
 
-const { render } = LitElement;
+import { render } from 'lit-html';
 
 class LitDatatable extends LitElement {
   static get styles() {
