@@ -1,6 +1,8 @@
 import {
-  LitElement, html, css, render,
+  LitElement, html, css
 } from 'lit-element';
+
+import { render } from 'lit-html';
 
 class LitDatatable extends LitElement {
   static get styles() {
@@ -206,7 +208,7 @@ class LitDatatable extends LitElement {
     tr.addEventListener('tap', trTapEvent);
     tr.addEventListener('mouseover', trOverEvent);
     tr.addEventListener('mouseout', trOutEvent);
-    return [{ type: 'mouseover', event: trOverEvent }, { type: 'mouseout', event: trOutEvent }];
+    return [{ type: 'mouseover', event: trOverEvent }, { type: 'mouseout', event: trOutEvent }, { type: 'tap', event: trTapEvent }];
   }
 
   cleanTrElements() {
