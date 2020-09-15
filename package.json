@@ -11,6 +11,10 @@
     "build": "tsc",
     "build:watch": "tsc --watch"
   },
+  "files": [
+    "*.js",
+    "**/*.js"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
