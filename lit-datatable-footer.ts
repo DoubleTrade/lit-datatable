@@ -1,14 +1,76 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement, css, customElement, html, property
+} from 'lit-element';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
+import type { PaperDropdownMenuElement } from '@polymer/paper-dropdown-menu/paper-dropdown-menu';
+import type { PaperListboxElement } from '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-tooltip/paper-tooltip';
+import type { Language, Resources } from './localize';
 import Localize from './localize';
 
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from './iron-flex-import';
 
-class LitDatatableFooter extends Localize(LitElement) {
+type FooterPosition = 'right' | 'left';
+
+@customElement('lit-datatable-footer')
+export class LitDatatableFooter extends Localize(LitElement) {
+  language: Language | null = 'en';
+
+  resources: Resources | null = {
+    en: {
+      nextPage: 'Next page',
+      previousPage: 'Previous page',
+      linesPerPage: 'Lines per page',
+      of: 'of',
+
+    },
+    'en-en': {
+      nextPage: 'Next page',
+      previousPage: 'Previous page',
+      linesPerPage: 'Lines per page',
+      of: 'of',
+    },
+    'en-US': {
+      nextPage: 'Next page',
+      previousPage: 'Previous page',
+      linesPerPage: 'Lines per page',
+      of: 'of',
+    },
+    'en-us': {
+      nextPage: 'Next page',
+      previousPage: 'Previous page',
+      linesPerPage: 'Lines per page',
+      of: 'of',
+    },
+    fr: {
+      nextPage: 'Page suivante',
+      previousPage: 'Page précédente',
+      linesPerPage: 'Lignes par page',
+      of: 'sur',
+    },
+    'fr-fr': {
+      nextPage: 'Page suivante',
+      previousPage: 'Page précédente',
+      linesPerPage: 'Lignes par page',
+      of: 'sur',
+    },
+  };
+
+  @property({ type: String }) footerPosition: FooterPosition = 'left';
+
+  @property({ type: Number }) size = 0;
+
+  @property({ type: Number }) page = 0;
+
+  @property({ type: Number }) totalElements = 0;
+
+  @property({ type: Number }) totalPages = 0;
+
+  @property({ type: Array }) availableSize = [];
+
   static get styles() {
     const mainStyle = css`
       :host {
@@ -48,10 +110,6 @@ class LitDatatableFooter extends Localize(LitElement) {
     return [mainStyle, ironFlexLayoutAlignTheme, ironFlexLayoutTheme];
   }
 
-  static get is() {
-    return 'lit-datatable-footer';
-  }
-
   render() {
     return html`
       <div class="layout horizontal center foot ${this.computePosition(this.footerPosition)}">
@@ -86,116 +144,60 @@ class LitDatatableFooter extends Localize(LitElement) {
       `;
   }
 
-  constructor() {
-    super();
-    this.footerPosition = 'left';
-    this.language = 'en';
-    this.resources = {
-      en: {
-        nextPage: 'Next page',
-        previousPage: 'Previous page',
-        linesPerPage: 'Lines per page',
-        of: 'of',
-
-      },
-      'en-en': {
-        nextPage: 'Next page',
-        previousPage: 'Previous page',
-        linesPerPage: 'Lines per page',
-        of: 'of',
-      },
-      'en-US': {
-        nextPage: 'Next page',
-        previousPage: 'Previous page',
-        linesPerPage: 'Lines per page',
-        of: 'of',
-      },
-      'en-us': {
-        nextPage: 'Next page',
-        previousPage: 'Previous page',
-        linesPerPage: 'Lines per page',
-        of: 'of',
-      },
-      fr: {
-        nextPage: 'Page suivante',
-        previousPage: 'Page précédente',
-        linesPerPage: 'Lignes par page',
-        of: 'sur',
-      },
-      'fr-fr': {
-        nextPage: 'Page suivante',
-        previousPage: 'Page précédente',
-        linesPerPage: 'Lignes par page',
-        of: 'sur',
-      },
-    };
-    this.availableSize = [];
-  }
-
-  static get properties() {
-    return {
-      footerPosition: { type: String },
-      size: { type: Number },
-      page: { type: Number },
-      totalElements: { type: Number },
-      totalPages: { type: Number },
-      availableSize: { type: Array },
-      language: { type: String },
-      resources: { type: Object },
-    };
-  }
-
-  computeCurrentSize(page, size, totalElements) {
+  computeCurrentSize(page: number, size: number, totalElements: number) {
     if (totalElements) {
       return (page * size) + 1;
     }
     return 0;
   }
 
-  computeCurrentMaxSize(page, size, totalElements) {
+  computeCurrentMaxSize(page: number, size: number, totalElements: number) {
     const maxSize = size * (page + 1);
     return maxSize > totalElements ? totalElements : maxSize;
   }
 
   launchEvent() {
-    this.dispatchEvent(new CustomEvent('page-or-size-changed', { detail: {page:this.page, size: this.size} }));
+    this.dispatchEvent(new CustomEvent('page-or-size-changed', { detail: { page: this.page, size: this.size } }));
   }
 
   nextPage() {
     if (this.page + 1 < this.totalPages) {
-      this.page = this.page + 1;
+      this.page += 1;
       this.launchEvent();
     }
   }
 
   prevPage() {
     if (this.page > 0) {
-      this.page = this.page - 1;
+      this.page -= 1;
       this.launchEvent();
     }
   }
 
-  nextButtonDisabled(page, totalPages) {
+  nextButtonDisabled(page: number, totalPages: number) {
     return totalPages === 0 || page + 1 === totalPages;
   }
 
-  prevButtonDisabled(page) {
+  prevButtonDisabled(page: number) {
     return page === 0;
   }
 
-  newSizeIsSelected({ currentTarget }) {
-    let newSize = currentTarget.selected;
+  newSizeIsSelected({ currentTarget }: CustomEvent) {
+    const paperListBox = currentTarget as PaperListboxElement;
+    let newSize = paperListBox.selected;
     if (newSize) {
-      newSize = parseInt(newSize, 10);
+      if (typeof newSize === 'string') {
+        newSize = parseInt(newSize, 10);
+      }
       if (newSize !== this.size) {
         this.page = 0;
-        this.size = parseInt(newSize, 10);
+        this.size = newSize;
         this.launchEvent();
       }
     }
   }
 
-  computePosition(position) {
+  computePosition(position: FooterPosition) {
     if (position === 'right') {
       return 'end-justified';
     }
@@ -204,17 +206,19 @@ class LitDatatableFooter extends Localize(LitElement) {
 
   async firstUpdated() {
     await this.updateComplete;
-    const paperDropdownMenu = this.shadowRoot.querySelector('paper-dropdown-menu');
-    paperDropdownMenu.updateStyles({
-      '--paper-input-container-underline_-_display': 'none',
-      '--paper-input-container-shared-input-style_-_font-weight': '500',
-      '--paper-input-container-shared-input-style_-_text-align': 'right',
-      '--paper-input-container-shared-input-style_-_font-size': '12px',
-      '--paper-input-container-shared-input-style_-_color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
-      '--paper-input-container-input-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
-      '--disabled-text-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
-    });
+    if (this.shadowRoot) {
+      const paperDropdownMenu = this.shadowRoot.querySelector<PaperDropdownMenuElement>('paper-dropdown-menu');
+      if (paperDropdownMenu) {
+        paperDropdownMenu.updateStyles({
+          '--paper-input-container-underline_-_display': 'none',
+          '--paper-input-container-shared-input-style_-_font-weight': '500',
+          '--paper-input-container-shared-input-style_-_text-align': 'right',
+          '--paper-input-container-shared-input-style_-_font-size': '12px',
+          '--paper-input-container-shared-input-style_-_color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+          '--paper-input-container-input-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+          '--disabled-text-color': 'var(--paper-datatable-navigation-bar-text-color, rgba(0, 0, 0, .54))',
+        });
+      }
+    }
   }
 }
-
-customElements.define(LitDatatableFooter.is, LitDatatableFooter);

@@ -1,16 +1,52 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement, css, customElement, html, property
+} from 'lit-element';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-icons/iron-icons';
-
+import type { Language, Resources } from '../localize';
 import Localize from '../localize';
 
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from '../iron-flex-import';
 
-class LdHeaderWithSort extends Localize(LitElement) {
-  static get is() {
-    return 'ld-header-with-sort';
-  }
+@customElement('ld-header-with-sort')
+export class LdHeaderWithSort extends Localize(LitElement) {
+  @property({ type: String }) direction: '' | 'asc' | 'desc' = '';
+
+  language: Language | null = 'en';
+
+  resources: Resources | null = {
+    en: {
+      sortAZ: 'Sort A-Z',
+      sortZA: 'Sort Z-A',
+      sortCancel: 'Cancel sort',
+    },
+    'en-en': {
+      sortAZ: 'Sort A-Z',
+      sortZA: 'Sort Z-A',
+      sortCancel: 'Cancel sort',
+    },
+    'en-US': {
+      sortAZ: 'Sort A-Z',
+      sortZA: 'Sort Z-A',
+      sortCancel: 'Cancel sort',
+    },
+    'en-us': {
+      sortAZ: 'Sort A-Z',
+      sortZA: 'Sort Z-A',
+      sortCancel: 'Cancel sort',
+    },
+    fr: {
+      sortAZ: 'Trier de A à Z',
+      sortZA: 'Trier de Z à A',
+      sortCancel: 'Annuler le tri',
+    },
+    'fr-fr': {
+      sortAZ: 'Trier de A à Z',
+      sortZA: 'Trier de Z à A',
+      sortCancel: 'Annuler le tri',
+    },
+  };
 
   static get styles() {
     const main = css`
@@ -48,52 +84,6 @@ class LdHeaderWithSort extends Localize(LitElement) {
   `;
   }
 
-  constructor() {
-    super();
-    this.direction = '';
-    this.language = 'en';
-    this.resources = {
-      en: {
-        sortAZ: 'Sort A-Z',
-        sortZA: 'Sort Z-A',
-        sortCancel: 'Cancel sort',
-      },
-      'en-en': {
-        sortAZ: 'Sort A-Z',
-        sortZA: 'Sort Z-A',
-        sortCancel: 'Cancel sort',
-      },
-      'en-US': {
-        sortAZ: 'Sort A-Z',
-        sortZA: 'Sort Z-A',
-        sortCancel: 'Cancel sort',
-      },
-      'en-us': {
-        sortAZ: 'Sort A-Z',
-        sortZA: 'Sort Z-A',
-        sortCancel: 'Cancel sort',
-      },
-      fr: {
-        sortAZ: 'Trier de A à Z',
-        sortZA: 'Trier de Z à A',
-        sortCancel: 'Annuler le tri',
-      },
-      'fr-fr': {
-        sortAZ: 'Trier de A à Z',
-        sortZA: 'Trier de Z à A',
-        sortCancel: 'Annuler le tri',
-      },
-    };
-  }
-
-  static get properties() {
-    return {
-      direction: { type: String },
-      language: { type: String },
-      resources: { notify: true },
-    };
-  }
-
   handleSort() {
     switch (this.direction) {
       case '':
@@ -110,7 +100,7 @@ class LdHeaderWithSort extends Localize(LitElement) {
     this.dispatchEvent(new CustomEvent('direction-changed', { detail: { value: this.direction } }));
   }
 
-  getTooltipText(direction) {
+  getTooltipText(direction: 'asc' | 'desc' | '') {
     if (direction === 'asc') {
       return this.localize('sortCancel');
     } if (direction === 'desc') {
@@ -119,5 +109,3 @@ class LdHeaderWithSort extends Localize(LitElement) {
     return this.localize('sortZA');
   }
 }
-
-window.customElements.define(LdHeaderWithSort.is, LdHeaderWithSort);

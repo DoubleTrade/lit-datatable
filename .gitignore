@@ -9,3 +9,7 @@ npm-debug.log
 .project
 *.out
 .sonar
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map

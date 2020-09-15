@@ -5,13 +5,15 @@
   "main": "lit-datatable.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint:javascript": "eslint . --ext js --ignore-path .gitignore --quiet",
-    "serve": "polymer serve"
+    "lint": "eslint . --ext js,ts --ignore-path .gitignore --quiet",
+    "serve": "polymer serve",
+    "build": "tsc",
+    "build:watch": "tsc --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@doubletrade/range-datepicker": "0.0.33",
+    "@doubletrade/lit-datepicker": "0.5.1",
     "@polymer/iron-demo-helpers": "~3.1.0",
     "@polymer/iron-flex-layout": "~3.0.1",
     "@polymer/iron-icon": "~3.0.1",
@@ -25,11 +27,14 @@
     "lit-element": "~2.3.1"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.3.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "polymer-cli": "^1.9.11"
+    "@typescript-eslint/eslint-plugin": "2.23.0",
+    "@typescript-eslint/parser": "2.23.0",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb-base": "14.2.0",
+    "eslint-import-resolver-typescript": "2.0.0",
+    "eslint-plugin-html": "3.2.2",
+    "eslint-plugin-import": "2.22.0",
+    "typescript": "^4.0.2"
   },
   "repository": {
     "type": "git",

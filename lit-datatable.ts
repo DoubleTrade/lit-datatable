@@ -1,0 +1,480 @@
+import {
+  LitElement, css, customElement, html, property, PropertyValues
+} from 'lit-element';
+
+import { render } from 'lit-html';
+import type { LitDatatableColumn } from './lit-datatable-column';
+
+interface Conf {
+  header: string;
+  property: string;
+  hidden: boolean;
+}
+
+interface EventOfTr {
+  type: string;
+  event: Function;
+}
+
+interface TableElement {
+  element: HTMLTableRowElement;
+  columns: Array<HTMLTableCellElement>;
+  events: Array<EventOfTr>;
+}
+
+@customElement('lit-datatable')
+export class LitDatatable extends LitElement {
+  @property({ type: Array }) data: Array<unknown> = [];
+
+  @property({ type: Array }) conf: Array<Conf> = [];
+
+  @property({ type: Array }) table: Array<TableElement> = [];
+
+  @property({ type: String }) sort = '';
+
+  @property({ type: Array }) headers: Array<HTMLTableHeaderCellElement> = [];
+
+  @property({ type: Boolean, attribute: 'sticky-header' }) stickyHeader = '';
+
+  @property({ type: Boolean }) datatableColumns: Map<string, LitDatatableColumn> = new Map();
+
+  @property({ type: Boolean }) datatableHeaders: Map<string, LitDatatableColumn> = new Map();
+
+  @property({ type: Number }) lastConfSize = 0;
+
+  @property({ type: Number }) lastDataSize = 0;
+
+  debounceGenerate = 0;
+
+  static get styles() {
+    const mainStyle = css`
+      :host {
+        display: block;
+      }
+
+      slot {
+        display: none;
+      }
+
+      table {
+        width: 100%;
+        border-spacing: 0px;
+        border-collapse: seperate;
+      }
+
+      th {
+        color: rgba(0, 0, 0, var(--dark-secondary-opacity));
+        text-align: left;
+        white-space: nowrap;
+
+        font-weight: var(--lit-datatable-api-header-weight, 500);
+        font-size: var(--lit-datatable-api-header-font-size, 12px);
+        padding: var(--lit-datatable-api-header-padding, 6px 26px);
+
+        border-bottom: 1px solid;
+        border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+      }
+
+      th.sticky {
+        position: sticky;
+        background: white;
+        top: 0;
+        z-index: 1;
+      }
+
+      tbody td {
+        height: var(--lit-datatable-api-body-td-height, 43px);
+      }
+
+      tbody tr {
+        height: var(--lit-datatable-api-body-tr-height, 43px);
+      }
+
+      thead tr {
+        height: var(--lit-datatable-api-header-tr-height, 43px);
+      }
+
+      thead th {
+        height: var(--lit-datatable-api-header-th-height, 43px);
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: var(--lit-datatable-api-tr-even-background-color, none);
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: var(--lit-datatable-api-tr-odd-background-color, none);
+      }
+
+      tbody tr:hover {
+        background: var(--lit-datatable-api-tr-hover-background-color, none);
+      }
+
+      tbody tr.selected {
+        background-color: var(--lit-datatable-api-tr-selected-background, var(--paper-grey-100));
+      }
+
+      td {
+        font-size: 13px;
+        font-weight: normal;
+        color: rgba(0, 0, 0, var(--dark-primary-opacity));
+        padding: 6px var(--lit-datatable-api-horizontal-padding, 26px);
+        cursor: var(--lit-datatable-api-td-cursor, inherit);
+        height: 36px;
+      }
+
+      tbody tr:not(:first-child) td {
+        border-top: 1px solid;
+        border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+      }
+
+      thead th.customTd,
+      tbody td.customTd {}
+      `;
+
+    return [mainStyle];
+  }
+
+  render() {
+    return html`
+      <slot></slot>
+      <table id="table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    `;
+  }
+
+  updated(properties: PropertyValues<{data: Array<unknown>; conf: Array<Conf>; sort: string}>) {
+    // Data or conf change we have to generate the table
+    if (properties.has('data') || properties.has('conf')) {
+      this.generateData();
+    }
+    if (properties.has('conf')) {
+      const confs = [...this.conf].filter((c) => !c.hidden);
+      this.updateHeaders(confs);
+    }
+
+    if (properties.has('sort')) {
+      this.updateSortHeaders();
+    }
+  }
+
+  updateSortHeaders() {
+    if (this.sort !== undefined && this.sort !== null) {
+      this.datatableHeaders.forEach((d) => { d.sort = this.sort; });
+    }
+  }
+
+  firstUpdated() {
+    if (this.shadowRoot) {
+      const slot = this.shadowRoot.querySelector('slot');
+      if (slot) {
+        const assignedNodes = slot.assignedNodes() as Array<LitDatatableColumn>;
+        this.datatableColumns = new Map(assignedNodes
+          .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.column)
+          .map((a) => [a.property, a]));
+        this.datatableHeaders = new Map(assignedNodes
+          .filter((a) => a.tagName === 'LIT-DATATABLE-COLUMN' && a.header)
+          .map((a) => [a.property, a]));
+      }
+    }
+  }
+
+  renderCell(item: any, td: HTMLTableCellElement, confProperty: string, event?: Event, litDatatableColumn?: LitDatatableColumn) {
+    if (litDatatableColumn !== undefined) {
+      if (event) {
+        litDatatableColumn = event.currentTarget as LitDatatableColumn;
+      }
+      const otherProperties = this.getOtherValues(litDatatableColumn, item);
+      if (litDatatableColumn?.html) {
+        render(litDatatableColumn.html(
+          this.extractData(item, litDatatableColumn.property), otherProperties
+        ), td);
+      } else if (litDatatableColumn) {
+        render(this.extractData(item, litDatatableColumn.property), td);
+      } else if (confProperty) {
+        render(this.extractData(item, confProperty), td);
+      }
+    }
+  }
+
+  setEventListener(datatableColumn: LitDatatableColumn, lineIndex: number, renderer: Function) {
+    if (datatableColumn) {
+      if (datatableColumn.eventsForDom[lineIndex]) {
+        datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex].bind(this));
+      }
+      datatableColumn.eventsForDom[lineIndex] = renderer;
+      datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex].bind(this));
+    }
+  }
+
+  getOtherValues(datatableColumn: LitDatatableColumn, item: any) {
+    let otherProperties = {};
+    if (datatableColumn && datatableColumn.otherProperties) {
+      otherProperties = datatableColumn.otherProperties.reduce((obj: any, key: string) => {
+        obj[key] = item[key];
+        return obj;
+      }, {});
+    }
+    return otherProperties;
+  }
+
+  renderHtml(conf: Conf, lineIndex: number, item: any, td: HTMLTableCellElement, tr: HTMLTableRowElement) {
+    const p = conf.property;
+    const datatableColumn = this.datatableColumns.get(p);
+    if (datatableColumn) {
+      this.setEventListener(datatableColumn, lineIndex, this.renderCell.bind(this, item, td, p));
+    }
+    this.renderCell(item, td, p, undefined, datatableColumn);
+    tr.appendChild(td);
+  }
+
+  cleanEventsOfTr(item: any) {
+    item.events.forEach((event: EventOfTr) => item.element.removeEventListener(event.type, event.event));
+  }
+
+  createEventsOfTr(tr: HTMLTableRowElement, item: any): Array<EventOfTr> {
+    const trTapEvent = this.trTap.bind(this, item);
+    const trOverEvent = this.trHover.bind(this, item);
+    const trOutEvent = this.trOut.bind(this, item);
+    tr.addEventListener('tap', trTapEvent);
+    tr.addEventListener('mouseover', trOverEvent);
+    tr.addEventListener('mouseout', trOutEvent);
+    return [{ type: 'mouseover', event: trOverEvent }, { type: 'mouseout', event: trOutEvent }, { type: 'tap', event: trTapEvent }];
+  }
+
+  cleanTrElements() {
+    const splices = this.table.splice(this.data.length);
+
+    splices.forEach((line: TableElement) => {
+      this.cleanEventsOfTr(line);
+      if (line?.element?.parentNode) {
+        line.element.parentNode.removeChild(line.element);
+      }
+    });
+  }
+
+  cleanTdElements(confs: Array<Conf>) {
+    [...this.table].forEach((line) => {
+      const splicedColumns = line.columns.splice(confs.length);
+
+      splicedColumns.forEach((column) => {
+        line.element.removeChild(column);
+      });
+    });
+  }
+
+  updateHeaders(confs: Array<Conf>) {
+    if (this.shadowRoot) {
+      let tr = this.shadowRoot.querySelector<HTMLTableRowElement>('table thead tr');
+      if (!tr) {
+        tr = document.createElement('tr');
+      }
+      if (this.lastConfSize > confs.length) {
+        [...this.headers].forEach((header, i) => {
+          if (i <= (this.lastConfSize - 1)) {
+            if (tr) {
+              tr.removeChild(header);
+            }
+            this.headers.splice(i, 1);
+          }
+        });
+      }
+      confs.forEach((conf: Conf, i: number) => {
+        const p = conf.property;
+        const datatableHeader = this.datatableHeaders.get(p);
+        let th: HTMLTableHeaderCellElement;
+        if (this.headers[i]) {
+          th = this.headers[i];
+        } else {
+          th = document.createElement('th');
+          if (this.stickyHeader) {
+            th.classList.add('sticky');
+          }
+          this.headers.push(th);
+        }
+        if (datatableHeader && datatableHeader.columnStyle) {
+          th.setAttribute('style', datatableHeader.columnStyle);
+        } else {
+          th.setAttribute('style', '');
+        }
+        if (datatableHeader) {
+          th.dataset.property = p;
+          this.setEventListener(datatableHeader, 0,
+            () => {
+              if (th.dataset.property === datatableHeader.property) {
+                render(datatableHeader.html(conf.header, datatableHeader.property), th);
+              }
+            });
+          if (datatableHeader.type === 'sort' || datatableHeader.type === 'filterSort') {
+            if (datatableHeader.sortEvent) {
+              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent.bind(this));
+            }
+            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
+            datatableHeader.addEventListener('sort', datatableHeader.sortEvent.bind(this));
+          }
+          if (datatableHeader.type === 'filter' || datatableHeader.type === 'filterSort') {
+            if (datatableHeader.filterEvent) {
+              datatableHeader.removeEventListener('filter', datatableHeader.filterEvent.bind(this));
+            }
+            datatableHeader.filterEvent = this.dispatchCustomEvent.bind(this, 'filter');
+            datatableHeader.addEventListener('filter', datatableHeader.filterEvent.bind(this));
+          }
+          if (datatableHeader.type === 'choices') {
+            if (datatableHeader.choicesEvent) {
+              datatableHeader.removeEventListener('choices', datatableHeader.choicesEvent.bind(this));
+            }
+            datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices');
+            datatableHeader.addEventListener('choices', datatableHeader.choicesEvent.bind(this));
+          }
+          if (datatableHeader.type === 'dateSort' || datatableHeader.type === 'dateSortNoRange') {
+            if (datatableHeader.dateSortEvent) {
+              datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent.bind(this));
+            }
+            datatableHeader.dateSortEvent = this.dispatchCustomEvent.bind(this, 'dates');
+            datatableHeader.addEventListener('dates', datatableHeader.dateSortEvent.bind(this));
+            if (datatableHeader.sortEvent) {
+              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent.bind(this));
+            }
+            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
+            datatableHeader.addEventListener('sort', datatableHeader.sortEvent.bind(this));
+          }
+        }
+        if (datatableHeader && datatableHeader.html) {
+          render(datatableHeader.html(conf.header, datatableHeader.property), th);
+        } else {
+          render(conf.header, th);
+        }
+        if (tr) {
+          tr.appendChild(th);
+        }
+      });
+      if (this.shadowRoot) {
+        const thead = this.shadowRoot.querySelector('thead');
+        if (thead) {
+          thead.appendChild(tr);
+        }
+      }
+    }
+  }
+
+  dispatchCustomEvent(key: string, { detail }: CustomEvent) {
+    this.dispatchEvent(new CustomEvent(key, { detail }));
+  }
+
+  trCreated(tr: HTMLTableRowElement, lineIndex: number, item: any) {
+    this.dispatchEvent(new CustomEvent('tr-create', { detail: { tr, lineIndex, item } }));
+  }
+
+  trTap(item: any) {
+    this.dispatchEvent(new CustomEvent('tap-tr', { detail: item }));
+  }
+
+  trHover(item: any) {
+    this.dispatchEvent(new CustomEvent('tr-mouseover', { detail: item }));
+  }
+
+  trOut(item: any) {
+    this.dispatchEvent(new CustomEvent('tr-mouseout', { detail: item }));
+  }
+
+  createTr(lineIndex: number, item: any) {
+    const tr = document.createElement('tr');
+    if (!this.table[lineIndex]) {
+      this.table[lineIndex] = { element: tr, columns: [], events: this.createEventsOfTr(tr, item) };
+    }
+    return tr;
+  }
+
+  createTd(lineIndex: number) {
+    const td = document.createElement('td') as HTMLTableCellElement;
+    this.table[lineIndex].columns.push(td);
+    return td;
+  }
+
+  updateBody(confs: Array<Conf>) {
+    if (this.data !== undefined) {
+      if (this.lastConfSize > confs.length) {
+        this.cleanTdElements(confs);
+      }
+      if (this.lastDataSize > this.data.length) {
+        this.cleanTrElements();
+      }
+      this.data.forEach((item, lineIndex: number) => {
+        let tr: HTMLTableRowElement;
+        if (this.table[lineIndex]) {
+          this.cleanEventsOfTr(this.table[lineIndex]);
+          tr = this.table[lineIndex].element;
+          this.table[lineIndex].events = this.createEventsOfTr(tr, item);
+        } else {
+          tr = this.createTr(lineIndex, item);
+        }
+
+        this.trCreated(tr, lineIndex, item);
+
+        confs.forEach((conf, columnIndex) => {
+          let td;
+          if (this.table[lineIndex].columns[columnIndex]) {
+            td = this.table[lineIndex].columns[columnIndex];
+          } else {
+            td = this.createTd(lineIndex);
+          }
+
+          const datatableColumn = this.datatableColumns.get(conf.property);
+          if (datatableColumn && datatableColumn.columnStyle) {
+            td.setAttribute('style', datatableColumn.columnStyle);
+          } else {
+            td.setAttribute('style', '');
+          }
+
+          this.renderHtml(conf, lineIndex, item, td, tr);
+        });
+        if (this.shadowRoot) {
+          const tbody = this.shadowRoot.querySelector('tbody');
+          if (tbody) {
+            tbody.appendChild(tr);
+          }
+        }
+      });
+    }
+  }
+
+  setLoading(loading: boolean) {
+    this.dispatchEvent(new CustomEvent('loading', { detail: { value: loading } }));
+  }
+
+  async generateData() {
+    this.setLoading(true);
+    await this.updateComplete;
+    if (this.debounceGenerate) {
+      clearTimeout(this.debounceGenerate);
+    }
+    this.debounceGenerate = setTimeout(() => {
+      const confs = [...this.conf].filter((c) => !c.hidden);
+      this.updateBody(confs);
+      if (this.data !== undefined) {
+        this.lastDataSize = this.data.length;
+        this.lastConfSize = confs.length;
+      }
+      this.setLoading(false);
+    });
+  }
+
+  extractData(item: any, columnProperty: string) {
+    if (columnProperty) {
+      const splittedProperties = columnProperty.split('.');
+      if (splittedProperties.length > 1) {
+        return splittedProperties.reduce((prevRow: any, p: string) => {
+          if (typeof prevRow === 'string' && item[prevRow] !== undefined && item[prevRow][p] !== undefined) {
+            return item[prevRow][p];
+          }
+
+          return prevRow[p] || '';
+        });
+      }
+      return item[columnProperty];
+    }
+    return null;
+  }
+}

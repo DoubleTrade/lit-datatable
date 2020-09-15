@@ -1,5 +1,6 @@
-
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement, css, customElement, html, property, PropertyValues, query
+} from 'lit-element';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item-body';
@@ -8,10 +9,25 @@ import '@polymer/iron-icons/iron-icons';
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from '../iron-flex-import';
 import './ld-header-with-sort';
 
-class LdHeaderWithChoices extends LitElement {
-  static get is() {
-    return 'ld-header-with-choices';
-  }
+export interface Choice {
+  key: string;
+  label: string;
+  style: string;
+  icon: string;
+  iconStyle: string;
+}
+
+@customElement('lit-header-with-choices')
+export class LdHeaderWithChoices extends LitElement {
+  @property({ type: Array }) choices: Array<Choice> = [];
+
+  @property({ type: Array }) selectedChoices: Array<string> = [];
+
+  @property({ type: String }) property = '';
+
+  @property({ type: Boolean }) opened = false;
+
+  @query('.dropdown') dropdown!: HTMLDivElement;
 
   static get styles() {
     const main = css`
@@ -88,7 +104,7 @@ class LdHeaderWithChoices extends LitElement {
 
         <div class="dropdown">
           ${this.choices && this.choices.map((choice) => html`
-            <paper-icon-item data-name="${choice.key}" @tap="${this.tapChoice.bind(this)}">
+            <paper-icon-item @tap="${this.tapChoice.bind(this, choice.key)}">
               <paper-icon-button slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></paper-icon-button>
               <paper-item-body style="${choice.style}">
                 ${choice.label}
@@ -104,10 +120,6 @@ class LdHeaderWithChoices extends LitElement {
 
   static get properties() {
     return {
-      choices: { type: Array },
-      selectedChoices: { type: Array },
-      property: { type: String },
-      opened: { type: Boolean },
     };
   }
 
@@ -117,19 +129,18 @@ class LdHeaderWithChoices extends LitElement {
     this.opened = false;
   }
 
-  computeIconName(choice, selectedChoices) {
+  computeIconName(choice: string, selectedChoices: Array<string>) {
     if (selectedChoices.indexOf(choice) === -1) {
       return 'check-box-outline-blank';
     }
     return 'check-box';
   }
 
-  countSelected(selectedChoices) {
+  countSelected(selectedChoices: Array<string>) {
     return selectedChoices.length > 0 ? ` (${selectedChoices.length})` : '';
   }
 
-  tapChoice({ currentTarget }) {
-    const { name } = currentTarget.dataset;
+  tapChoice(name: string) {
     const selectedChoices = [...this.selectedChoices];
     const indexOfChoice = selectedChoices.indexOf(name);
     if (indexOfChoice === -1) {
@@ -139,16 +150,16 @@ class LdHeaderWithChoices extends LitElement {
     }
     this.dispatchEvent(new CustomEvent(
       'selected-choices-changed',
-      { detail: { value: selectedChoices, property: this.property } },
+      { detail: { value: selectedChoices, property: this.property } }
     ));
   }
 
-  updated(properties) {
+  updated(properties: PropertyValues<{opened: boolean}>) {
     if (properties.has('opened')) {
       if (this.opened) {
-        this.shadowRoot.querySelector('.dropdown').classList.remove('hide');
+        this.dropdown.classList.remove('hide');
       } else {
-        this.shadowRoot.querySelector('.dropdown').classList.add('hide');
+        this.dropdown.classList.add('hide');
       }
       this.fitToBorder();
     }
@@ -159,19 +170,20 @@ class LdHeaderWithChoices extends LitElement {
   }
 
   fitToBorder() {
-    const dropdownElement = this.shadowRoot.querySelector('.dropdown');
-    if (dropdownElement) {
-      dropdownElement.style.left = '0';
-      const dropdownWidth = dropdownElement.offsetWidth;
-      const viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-      const thisX = this.getBoundingClientRect().x;
-      const thisY = this.getBoundingClientRect().y;
-      if ((dropdownWidth + thisX) > viewPortWidth) {
-        dropdownElement.style.left = `${viewPortWidth - dropdownWidth}px`;
-      } else {
-        dropdownElement.style.left = `${thisX}px`;
+    if (this.shadowRoot) {
+      if (this.dropdown) {
+        this.dropdown.style.left = '0';
+        const dropdownWidth = this.dropdown.offsetWidth;
+        const viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const thisX = this.getBoundingClientRect().x;
+        const thisY = this.getBoundingClientRect().y;
+        if ((dropdownWidth + thisX) > viewPortWidth) {
+          this.dropdown.style.left = `${viewPortWidth - dropdownWidth}px`;
+        } else {
+          this.dropdown.style.left = `${thisX}px`;
+        }
+        this.dropdown.style.top = `${thisY + this.offsetHeight}px`;
       }
-      dropdownElement.style.top = `${thisY + this.offsetHeight}px`;
     }
   }
 
@@ -194,5 +206,3 @@ class LdHeaderWithChoices extends LitElement {
     });
   }
 }
-
-window.customElements.define(LdHeaderWithChoices.is, LdHeaderWithChoices);

@@ -1,13 +1,49 @@
-import { LitElement, html, css } from 'lit-element';
+import {
+  LitElement, css, customElement, html, property
+} from 'lit-element';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-icon-button/paper-icon-button';
 import Localize from '../localize';
 import './ld-header-with-sort';
 
-class LdHeaderWithFilterAndSort extends Localize(LitElement) {
-  static get is() {
-    return 'ld-header-with-filter-and-sort';
-  }
+@customElement('ld-header-with-filter-and-sort')
+export class LdHeaderWithFilterAndSort extends Localize(LitElement) {
+  @property({ type: String }) header = '';
+
+  @property({ type: String }) direction: '' | 'asc' | 'desc' = '';
+
+  @property({ type: Boolean }) active = false;
+
+  @property({ type: String }) filterValue: string | null = null;
+
+  @property({ type: String }) property = '';
+
+  resources = {
+    en: {
+      search: 'Search',
+      clear: 'Clear',
+    },
+    'en-en': {
+      search: 'Search',
+      clear: 'Clear',
+    },
+    'en-US': {
+      search: 'Search',
+      clear: 'Clear',
+    },
+    'en-us': {
+      search: 'Search',
+      clear: 'Clear',
+    },
+    fr: {
+      search: 'Rechercher',
+      clear: 'Effacer',
+    },
+    'fr-fr': {
+      search: 'Rechercher',
+      clear: 'Effacer',
+    },
+  };
 
   static get styles() {
     const mainStyle = css`
@@ -87,50 +123,6 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
       </ld-header-with-sort>`;
   }
 
-  constructor() {
-    super();
-    this.resources = {
-      en: {
-        search: 'Search',
-        clear: 'Clear',
-      },
-      'en-en': {
-        search: 'Search',
-        clear: 'Clear',
-      },
-      'en-US': {
-        search: 'Search',
-        clear: 'Clear',
-      },
-      'en-us': {
-        search: 'Search',
-        clear: 'Clear',
-      },
-      fr: {
-        search: 'Rechercher',
-        clear: 'Effacer',
-      },
-      'fr-fr': {
-        search: 'Rechercher',
-        clear: 'Effacer',
-      },
-    };
-    this.language = 'en';
-    this.active = false;
-  }
-
-  static get properties() {
-    return {
-      header: { type: String },
-      direction: { type: String },
-      active: { type: Boolean },
-      filterValue: { type: String },
-      language: { type: String },
-      resources: { type: Object },
-      property: { type: String },
-    };
-  }
-
   async toggleActive() {
     this.active = !this.active;
     this.dispatchEvent(new CustomEvent('active-changed', { detail: { value: this.active } }));
@@ -139,22 +131,24 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
       this.dispatchFilterEvent();
     } else {
       await this.updateComplete;
-      const paperInput = this.shadowRoot.querySelector('paper-input');
-      if (paperInput) {
-        paperInput.setAttribute('tabindex', 1);
-        paperInput.focus();
+      if (this.shadowRoot) {
+        const paperInput = this.shadowRoot.querySelector('paper-input');
+        if (paperInput) {
+          paperInput.setAttribute('tabindex', '1');
+          paperInput.focus();
+        }
       }
     }
   }
 
-  directionChanged({ detail }) {
+  directionChanged({ detail }: CustomEvent<{value: '' | 'asc' | 'desc'}>) {
     if (this.direction !== detail.value) {
       this.direction = detail.value;
       this.dispatchEvent(new CustomEvent('direction-changed', { detail: { value: this.direction } }));
     }
   }
 
-  valueChanged({ detail }) {
+  valueChanged({ detail }: CustomEvent<{value: string}>) {
     if (this.filterValue !== detail.value) {
       this.filterValue = detail.value;
       this.dispatchFilterEvent();
@@ -165,5 +159,3 @@ class LdHeaderWithFilterAndSort extends Localize(LitElement) {
     this.dispatchEvent(new CustomEvent('filter-value-changed', { detail: { value: this.filterValue, property: this.property } }));
   }
 }
-
-window.customElements.define(LdHeaderWithFilterAndSort.is, LdHeaderWithFilterAndSort);
