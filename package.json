@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext js,ts --ignore-path .gitignore --quiet",
+    "prepublishOnly": "npm run lint && npm run build",
     "serve": "polymer serve",
     "build": "tsc",
     "build:watch": "tsc --watch"
