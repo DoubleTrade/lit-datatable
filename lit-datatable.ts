@@ -193,9 +193,10 @@ export class LitDatatable extends LitElement {
         ), td);
       } else if (litDatatableColumn) {
         render(this.extractData(item, litDatatableColumn.property), td);
-      } else if (confProperty) {
-        render(this.extractData(item, confProperty), td);
       }
+    }
+    if (confProperty) {
+      render(this.extractData(item, confProperty), td);
     }
   }
 
