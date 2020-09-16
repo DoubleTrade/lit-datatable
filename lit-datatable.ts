@@ -182,10 +182,10 @@ export class LitDatatable extends LitElement {
   }
 
   renderCell(item: any, td: HTMLTableCellElement, confProperty: string, event?: Event, litDatatableColumn?: LitDatatableColumn) {
-    if (litDatatableColumn !== undefined) {
-      if (event) {
-        litDatatableColumn = event.currentTarget as LitDatatableColumn;
-      }
+    if (event) {
+      litDatatableColumn = event.currentTarget as LitDatatableColumn;
+    }
+    if (litDatatableColumn) {
       const otherProperties = this.getOtherValues(litDatatableColumn, item);
       if (litDatatableColumn?.html) {
         render(litDatatableColumn.html(
@@ -194,8 +194,7 @@ export class LitDatatable extends LitElement {
       } else if (litDatatableColumn) {
         render(this.extractData(item, litDatatableColumn.property), td);
       }
-    }
-    if (confProperty) {
+    } else if (confProperty) {
       render(this.extractData(item, confProperty), td);
     }
   }
