@@ -17,7 +17,7 @@ export interface Choice {
   iconStyle: string;
 }
 
-@customElement('lit-header-with-choices')
+@customElement('ld-header-with-choices')
 export class LdHeaderWithChoices extends LitElement {
   @property({ type: Array }) choices: Array<Choice> = [];
 
