@@ -309,36 +309,36 @@ export class LitDatatable extends LitElement {
             });
           if (datatableHeader.type === 'sort' || datatableHeader.type === 'filterSort') {
             if (datatableHeader.sortEvent) {
-              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent.bind(this));
+              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent as EventListener);
             }
             datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
-            datatableHeader.addEventListener('sort', datatableHeader.sortEvent.bind(this));
+            datatableHeader.addEventListener('sort', datatableHeader.sortEvent as EventListener);
           }
           if (datatableHeader.type === 'filter' || datatableHeader.type === 'filterSort') {
             if (datatableHeader.filterEvent) {
-              datatableHeader.removeEventListener('filter', datatableHeader.filterEvent.bind(this));
+              datatableHeader.removeEventListener('filter', datatableHeader.filterEvent as EventListener);
             }
             datatableHeader.filterEvent = this.dispatchCustomEvent.bind(this, 'filter');
-            datatableHeader.addEventListener('filter', datatableHeader.filterEvent.bind(this));
+            datatableHeader.addEventListener('filter', datatableHeader.filterEvent as EventListener);
           }
           if (datatableHeader.type === 'choices') {
             if (datatableHeader.choicesEvent) {
-              datatableHeader.removeEventListener('choices', datatableHeader.choicesEvent.bind(this));
+              datatableHeader.removeEventListener('choices', datatableHeader.choicesEvent as EventListener);
             }
             datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices');
-            datatableHeader.addEventListener('choices', datatableHeader.choicesEvent.bind(this));
+            datatableHeader.addEventListener('choices', datatableHeader.choicesEvent as EventListener);
           }
           if (datatableHeader.type === 'dateSort' || datatableHeader.type === 'dateSortNoRange') {
             if (datatableHeader.dateSortEvent) {
-              datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent.bind(this));
+              datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent as EventListener);
             }
             datatableHeader.dateSortEvent = this.dispatchCustomEvent.bind(this, 'dates');
-            datatableHeader.addEventListener('dates', datatableHeader.dateSortEvent.bind(this));
+            datatableHeader.addEventListener('dates', datatableHeader.dateSortEvent as EventListener);
             if (datatableHeader.sortEvent) {
-              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent.bind(this));
+              datatableHeader.removeEventListener('sort', datatableHeader.sortEvent as EventListener);
             }
             datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
-            datatableHeader.addEventListener('sort', datatableHeader.sortEvent.bind(this));
+            datatableHeader.addEventListener('sort', datatableHeader.sortEvent as EventListener);
           }
         }
         if (datatableHeader && datatableHeader.html) {
