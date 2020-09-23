@@ -76,6 +76,14 @@ class LitDatatableDemo extends LitElement {
           <lit-datatable-column header="${true}" property="fruit" .html="${sort}"></lit-datatable-column>
           <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
         </lit-datatable>
+        <lit-datatable-footer
+          .availableSize="${[5, 10, 25]}"
+          totalPages="10"
+          totalElements="24"
+          size="25"
+          page="0"
+          language="en">
+        </lit-datatable-footer>
       </div>`;
   }
 }

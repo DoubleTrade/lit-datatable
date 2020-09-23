@@ -27,7 +27,7 @@
     "@polymer/iron-icons": "~3.0.1",
     "@polymer/paper-dropdown-menu": "~3.0.1",
     "@polymer/paper-icon-button": "~3.0.2",
-    "@polymer/paper-input": "~3.0.1",
+    "@polymer/paper-input": "^3.0.2",
     "@polymer/paper-item": "~3.0.1",
     "@polymer/paper-listbox": "~3.0.1",
     "@polymer/paper-tooltip": "~3.0.1",
@@ -42,7 +42,7 @@
     "eslint-import-resolver-typescript": "2.0.0",
     "eslint-plugin-html": "3.2.2",
     "eslint-plugin-import": "2.22.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   },
   "repository": {
     "type": "git",

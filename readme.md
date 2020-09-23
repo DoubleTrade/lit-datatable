@@ -3,6 +3,8 @@
 
 `lit-datatable` is a material design implementation of a data table.
 
+![screen](screen.png)
+
 
 ## Roadmap
 Add some helpers.
