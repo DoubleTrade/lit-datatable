@@ -1,6 +1,6 @@
 {
   "name": "@doubletrade/lit-datatable",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "lit-datatable is a material design implementation of a data table, powered by lit-element.",
   "main": "lit-datatable.js",
   "scripts": {
@@ -21,17 +21,17 @@
   "license": "ISC",
   "dependencies": {
     "@doubletrade/lit-datepicker": "0.5.1",
-    "@polymer/iron-demo-helpers": "~3.1.0",
-    "@polymer/iron-flex-layout": "~3.0.1",
-    "@polymer/iron-icon": "~3.0.1",
-    "@polymer/iron-icons": "~3.0.1",
-    "@polymer/paper-dropdown-menu": "~3.0.1",
-    "@polymer/paper-icon-button": "~3.0.2",
-    "@polymer/paper-input": "^3.0.2",
-    "@polymer/paper-item": "~3.0.1",
-    "@polymer/paper-listbox": "~3.0.1",
-    "@polymer/paper-tooltip": "~3.0.1",
-    "lit-element": "~2.3.1"
+    "@polymer/iron-demo-helpers": "^3.1.0",
+    "@polymer/iron-flex-layout": "^3.0.1",
+    "@polymer/iron-icon": "^3.0.1",
+    "@polymer/iron-icons": "^3.0.1",
+    "@polymer/paper-dropdown-menu": "^3.1.0",
+    "@polymer/paper-icon-button": "^3.0.2",
+    "@polymer/paper-input": "^3.2.1",
+    "@polymer/paper-item": "^3.0.1",
+    "@polymer/paper-listbox": "^3.0.1",
+    "@polymer/paper-tooltip": "^3.0.1",
+    "lit-element": "^2.4.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.23.0",
