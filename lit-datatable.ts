@@ -1,6 +1,7 @@
 import {
   LitElement, css, customElement, html, property, PropertyValues
 } from 'lit-element';
+import { deepEqual } from 'fast-equals';
 
 import { render } from 'lit-html';
 import type { LitDatatableColumn } from './lit-datatable-column';
@@ -147,7 +148,8 @@ export class LitDatatable extends LitElement {
 
   updated(properties: PropertyValues<{data: Array<unknown>; conf: Array<Conf>; sort: string}>) {
     // Data or conf change we have to generate the table
-    if (properties.has('data') || properties.has('conf')) {
+    if ((properties.has('data') && !deepEqual(properties.get('data'), this.data))
+      || (properties.has('conf') && !deepEqual(properties.get('conf'), this.conf))) {
       this.generateData();
     }
     if (properties.has('conf')) {

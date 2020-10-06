@@ -1,6 +1,6 @@
 {
   "name": "@doubletrade/lit-datatable",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "lit-datatable is a material design implementation of a data table, powered by lit-element.",
   "main": "lit-datatable.js",
   "scripts": {
@@ -31,6 +31,7 @@
     "@polymer/paper-item": "^3.0.1",
     "@polymer/paper-listbox": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
+    "fast-equals": "^2.0.0",
     "lit-element": "^2.4.0"
   },
   "devDependencies": {
