@@ -35,29 +35,10 @@ export class LdHeaderWithDateAndSort extends LitElement {
       :host {
         display: block;
       }
-
-      paper-input {
-        min-width: var(--paper-datatable-api-min-width-input-filter, 120px);
-        --paper-input-container-underline-focus: {
-          display: block;
-        }
-        ;
-        --paper-input-container-label: {
-          position: initial;
-        }
-        ;
-        --paper-input-container: {
-          padding: 0;
-        }
-        ;
-        --paper-input-container-input: {
-          font-size: 12px;
-        }
-        ;
-      }
-
-      paper-icon-button[icon="search"] {
+      paper-icon-button {
         padding: 0;
+        min-width: 24px;
+        min-height: 24px;
         width: 24px;
         height: 24px;
         --paper-icon-button: {
@@ -73,6 +54,28 @@ export class LdHeaderWithDateAndSort extends LitElement {
 
   render() {
     const input = (dateFrom: string, dateTo: string, noRange: boolean) => html`
+      <style>
+        paper-input {
+          min-width: var(--paper-datatable-api-min-width-input-filter, 120px);
+          --paper-input-container-underline-focus: {
+            display: block;
+          }
+          ;
+          --paper-input-container-label: {
+            position: initial;
+          }
+          ;
+          --paper-input-container: {
+            padding: 0;
+          }
+          ;
+          --paper-input-container-input: {
+            font-size: 12px;
+          }
+          ;
+        }
+      </style>
+
       <paper-input
         no-label-float
         placeholder="${this.header}"
@@ -91,6 +94,8 @@ export class LdHeaderWithDateAndSort extends LitElement {
               .locale="${this.language}"
               .dateFrom="${this.dateFrom}"
               .dateTo="${this.dateTo}"
+              @date-from-changed="${this.dateFromChanged}"
+              @date-to-changed="${this.dateToChanged}"
               forceNarrow>
             </lit-datepicker-input>
             <paper-icon-button icon="clear" @tap="${this.clearDate.bind(this)}"></paper-icon-button>
@@ -107,7 +112,6 @@ export class LdHeaderWithDateAndSort extends LitElement {
   }
 
   updated(properties: PropertyValues) {
-    console.log(this.dateFrom, this.dateTo);
     if (properties.has('direction')) {
       this.dispatchEvent(new CustomEvent('direction-changed', { detail: { value: this.direction } }));
     }
@@ -115,36 +119,32 @@ export class LdHeaderWithDateAndSort extends LitElement {
     if (properties.has('active')) {
       this.dispatchEvent(new CustomEvent('active-changed', { detail: { value: this.active } }));
     }
-
-    if (properties.has('dateFrom')) {
-      this.dateFromChanged();
-    }
-
-    if (properties.has('dateTo')) {
-      this.dateToChanged();
-    }
   }
 
-  dateToChanged() {
-    if (this.dateFrom && this.dateTo) {
+  dateToChanged({ detail }: CustomEvent<{value: string}>) {
+    if (this.dateFrom && detail.value) {
+      this.dateTo = detail.value;
       this.dispatchEvent(new CustomEvent('filter', {
         detail: {
           dateFrom: parseInt(this.dateFrom, 10),
-          dateTo: parseInt(this.dateTo, 10),
+          dateTo: parseInt(detail.value, 10),
           property: this.property,
         },
       }));
     }
   }
 
-  dateFromChanged() {
-    if (this.dateFrom && this.noRange) {
-      this.dispatchEvent(new CustomEvent('filter', {
-        detail: {
-          dateFrom: parseInt(this.dateFrom, 10),
-          property: this.property,
-        },
-      }));
+  dateFromChanged({ detail }: CustomEvent<{value: string}>) {
+    if (detail.value) {
+      this.dateFrom = detail.value;
+      if (this.noRange) {
+        this.dispatchEvent(new CustomEvent('filter', {
+          detail: {
+            dateFrom: parseInt(detail.value, 10),
+            property: this.property,
+          },
+        }));
+      }
     }
   }
 
