@@ -1,6 +1,6 @@
 {
   "name": "@doubletrade/lit-datatable",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "lit-datatable is a material design implementation of a data table, powered by lit-element.",
   "main": "lit-datatable.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@doubletrade/lit-datepicker": "0.5.2",
+    "@doubletrade/lit-datepicker": "0.6.0",
     "@polymer/iron-demo-helpers": "^3.1.0",
     "@polymer/iron-flex-layout": "^3.0.1",
     "@polymer/iron-icon": "^3.0.1",
