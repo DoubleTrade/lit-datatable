@@ -204,10 +204,10 @@ export class LitDatatable extends LitElement {
   setEventListener(datatableColumn: LitDatatableColumn, lineIndex: number, renderer: Function) {
     if (datatableColumn) {
       if (datatableColumn.eventsForDom[lineIndex]) {
-        datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex].bind(this));
+        datatableColumn.removeEventListener('refresh', datatableColumn.eventsForDom[lineIndex].bind(this));
       }
       datatableColumn.eventsForDom[lineIndex] = renderer;
-      datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex].bind(this));
+      datatableColumn.addEventListener('refresh', datatableColumn.eventsForDom[lineIndex].bind(this));
     }
   }
 
