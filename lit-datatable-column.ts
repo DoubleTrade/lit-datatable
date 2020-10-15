@@ -16,9 +16,9 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: Array }) otherProperties: Array<string> = [];
 
-  @property({ type: Function }) html: Function = () => null;
+  @property({ type: Function }) html: Function | null = null;
 
-  @property({ type: Array }) eventsForDom: Array<Function> = [];
+  @property({ type: Array }) eventsForDom: Array<EventListener> = [];
 
   @property({ type: String }) sort = '';
 

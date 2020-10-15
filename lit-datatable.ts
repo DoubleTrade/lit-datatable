@@ -150,6 +150,7 @@ export class LitDatatable extends LitElement {
     if (properties.has('data') || properties.has('conf')) {
       this.generateData();
     }
+
     if (properties.has('conf')) {
       const confs = [...this.conf].filter((c) => !c.hidden);
       this.updateHeaders(confs);
@@ -199,13 +200,13 @@ export class LitDatatable extends LitElement {
     }
   }
 
-  setEventListener(datatableColumn: LitDatatableColumn, lineIndex: number, renderer: Function) {
+  setEventListener(datatableColumn: LitDatatableColumn, lineIndex: number, renderer: EventListener) {
     if (datatableColumn) {
       if (datatableColumn.eventsForDom[lineIndex]) {
-        datatableColumn.removeEventListener('refresh', datatableColumn.eventsForDom[lineIndex].bind(this));
+        datatableColumn.removeEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
       }
       datatableColumn.eventsForDom[lineIndex] = renderer;
-      datatableColumn.addEventListener('refresh', datatableColumn.eventsForDom[lineIndex].bind(this));
+      datatableColumn.addEventListener('html-changed', datatableColumn.eventsForDom[lineIndex]);
     }
   }
 
@@ -304,7 +305,7 @@ export class LitDatatable extends LitElement {
           this.setEventListener(datatableHeader, 0,
             () => {
               if (th.dataset.property === datatableHeader.property) {
-                render(datatableHeader.html(conf.header, datatableHeader.property), th);
+                render(datatableHeader.html ? datatableHeader.html(conf.header, datatableHeader.property) : null, th);
               }
             });
           if (datatableHeader.type === 'sort' || datatableHeader.type === 'filterSort') {
@@ -447,18 +448,13 @@ export class LitDatatable extends LitElement {
   async generateData() {
     this.setLoading(true);
     await this.updateComplete;
-    if (this.debounceGenerate) {
-      clearTimeout(this.debounceGenerate);
+    const confs = [...this.conf].filter((c) => !c.hidden);
+    this.updateBody(confs);
+    if (this.data !== undefined) {
+      this.lastDataSize = this.data.length;
+      this.lastConfSize = confs.length;
     }
-    this.debounceGenerate = setTimeout(() => {
-      const confs = [...this.conf].filter((c) => !c.hidden);
-      this.updateBody(confs);
-      if (this.data !== undefined) {
-        this.lastDataSize = this.data.length;
-        this.lastConfSize = confs.length;
-      }
-      this.setLoading(false);
-    });
+    this.setLoading(false);
   }
 
   extractData(item: any, columnProperty: string) {
