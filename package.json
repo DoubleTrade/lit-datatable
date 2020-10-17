@@ -4,7 +4,6 @@
   "description": "lit-datatable is a material design implementation of a data table, powered by lit-element.",
   "main": "lit-datatable.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext js,ts --ignore-path .gitignore --quiet",
     "prepublishOnly": "npm run lint && npm run build",
     "serve": "wds --node-resolve --app-index demo/index.html",
