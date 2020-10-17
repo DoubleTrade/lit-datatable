@@ -14,7 +14,7 @@ export interface Conf {
 
 interface EventOfTr {
   type: string;
-  event: Function;
+  event: (item: any) => void;
 }
 
 interface TableElement {
@@ -314,33 +314,33 @@ export class LitDatatable extends LitElement {
             if (datatableHeader.sortEvent) {
               datatableHeader.removeEventListener('sort', datatableHeader.sortEvent as EventListener);
             }
-            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
+            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort') as EventListener;
             datatableHeader.addEventListener('sort', datatableHeader.sortEvent as EventListener);
           }
           if (datatableHeader.type === 'filter' || datatableHeader.type === 'filterSort') {
             if (datatableHeader.filterEvent) {
               datatableHeader.removeEventListener('filter', datatableHeader.filterEvent as EventListener);
             }
-            datatableHeader.filterEvent = this.dispatchCustomEvent.bind(this, 'filter');
+            datatableHeader.filterEvent = this.dispatchCustomEvent.bind(this, 'filter') as EventListener;
             datatableHeader.addEventListener('filter', datatableHeader.filterEvent as EventListener);
           }
           if (datatableHeader.type === 'choices') {
             if (datatableHeader.choicesEvent) {
               datatableHeader.removeEventListener('choices', datatableHeader.choicesEvent as EventListener);
             }
-            datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices');
+            datatableHeader.choicesEvent = this.dispatchCustomEvent.bind(this, 'choices') as EventListener;
             datatableHeader.addEventListener('choices', datatableHeader.choicesEvent as EventListener);
           }
           if (datatableHeader.type === 'dateSort' || datatableHeader.type === 'dateSortNoRange') {
             if (datatableHeader.dateSortEvent) {
               datatableHeader.removeEventListener('dates', datatableHeader.dateSortEvent as EventListener);
             }
-            datatableHeader.dateSortEvent = this.dispatchCustomEvent.bind(this, 'dates');
+            datatableHeader.dateSortEvent = this.dispatchCustomEvent.bind(this, 'dates') as EventListener;
             datatableHeader.addEventListener('dates', datatableHeader.dateSortEvent as EventListener);
             if (datatableHeader.sortEvent) {
               datatableHeader.removeEventListener('sort', datatableHeader.sortEvent as EventListener);
             }
-            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort');
+            datatableHeader.sortEvent = this.dispatchCustomEvent.bind(this, 'sort') as EventListener;
             datatableHeader.addEventListener('sort', datatableHeader.sortEvent as EventListener);
           }
         }
@@ -362,7 +362,7 @@ export class LitDatatable extends LitElement {
     }
   }
 
-  dispatchCustomEvent(key: string, { detail }: CustomEvent) {
+  dispatchCustomEvent(key: string, { detail }: CustomEvent): any {
     this.dispatchEvent(new CustomEvent(key, { detail }));
   }
 

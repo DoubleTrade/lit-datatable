@@ -16,7 +16,7 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: Array }) otherProperties: Array<string> = [];
 
-  @property({ type: Function }) html: Function | null = null;
+  @property({ type: Function }) html: ((value: string, p: any) => void) | null = null;
 
   @property({ type: Array }) eventsForDom: Array<EventListener> = [];
 
@@ -26,13 +26,13 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: String }) language: Language = 'en';
 
-  @property({ type: Function }) sortEvent: Function = () => null;
+  @property({ type: Function }) sortEvent: EventListener | null = null;
 
-  @property({ type: Function }) choicesEvent: Function = () => null;
+  @property({ type: Function }) choicesEvent: EventListener | null = null;
 
-  @property({ type: Function }) dateSortEvent: Function = () => null;
+  @property({ type: Function }) dateSortEvent: EventListener | null = null;
 
-  @property({ type: Function }) filterEvent: Function = () => null;
+  @property({ type: Function }) filterEvent: EventListener | null = null;
 
   @property({ type: String }) filterValue = '';
 
