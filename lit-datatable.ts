@@ -6,7 +6,7 @@ import { deepEqual } from 'fast-equals';
 import { render } from 'lit-html';
 import type { LitDatatableColumn } from './lit-datatable-column';
 
-interface Conf {
+export interface Conf {
   header: string;
   property: string;
   hidden: boolean;

@@ -13,3 +13,5 @@ npm-debug.log
 *.js.map
 *.d.ts
 *.d.ts.map
+!demo/index.js
+!web-test-runner.config.js
