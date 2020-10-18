@@ -181,4 +181,53 @@ describe('lit-datatable', () => {
       expect(bodyTds[3]?.textContent).to.be.equal('banana');
     }
   });
+
+  it('change data length', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData);
+    await litDatatable.elementUpdated();
+    let bodyTrs;
+    let bodyTds;
+    let headTrs;
+    let headThs;
+    ({
+      bodyTrs, bodyTds, headTrs, headThs,
+    } = litDatatable);
+    expect(headTrs?.length).to.be.equal(1);
+    expect(headThs?.length).to.be.equal(3);
+    expect(bodyTrs?.length).to.be.equal(2);
+    expect(bodyTds?.length).to.be.equal(6);
+
+    // Add row
+    const addRow = [
+      { fruit: 'apple', color: 'green', weight: '100gr' },
+      { fruit: 'banana', color: 'yellow', weight: '140gr' },
+      { fruit: 'cherry', color: 'red', weight: '40gr' },
+    ];
+    litDatatable.el.data = addRow;
+    await litDatatable.elementUpdated();
+
+    ({
+      bodyTrs, bodyTds, headTrs, headThs,
+    } = litDatatable);
+    expect(headTrs?.length).to.be.equal(1);
+    expect(headThs?.length).to.be.equal(3);
+    expect(bodyTrs?.length).to.be.equal(3);
+    expect(bodyTds?.length).to.be.equal(9);
+
+    // Delete row
+    const deleteRow = [
+      { fruit: 'apple', color: 'green', weight: '100gr' },
+    ];
+    litDatatable.el.data = deleteRow;
+    await litDatatable.elementUpdated();
+
+    ({
+      bodyTrs, bodyTds, headTrs, headThs,
+    } = litDatatable);
+    expect(headTrs?.length).to.be.equal(1);
+    expect(headThs?.length).to.be.equal(3);
+    expect(bodyTrs?.length).to.be.equal(1);
+    expect(bodyTds?.length).to.be.equal(3);
+  });
 });

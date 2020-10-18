@@ -8,7 +8,8 @@ import '../../lit-datatable-column';
 
 interface PropertyColumn {
   property: string;
-  html: (value: string, property?: string) => TemplateResult;
+  html: (value: string, otherValues?: any) => TemplateResult;
+  otherProperties: Array<string>;
 }
 
 class LitDatatableWithColumnTest {
@@ -18,10 +19,10 @@ class LitDatatableWithColumnTest {
     const litDatatable = html`
       <lit-datatable .conf="${conf}" .data="${data}">
         ${columns.map((column) => html`
-          <lit-datatable-column .html="${column.html}" .property="${column.property}" column></lit-datatable-column>
+          <lit-datatable-column .html="${column.html}" .property="${column.property}" .otherProperties="${column.otherProperties}" column></lit-datatable-column>
         `)}
         ${headers.map((header) => html`
-          <lit-datatable-column .html="${header.html}" .property="${header.property}" header></lit-datatable-column>
+          <lit-datatable-column .html="${header.html}" .property="${header.property}" .otherProperties="${header.otherProperties}" header></lit-datatable-column>
         `)}
       </lit-datatable>
     `;
@@ -79,6 +80,7 @@ describe('lit-datatable', () => {
       {
         html: (value) => html`${value} test`,
         property: 'fruit',
+        otherProperties: [],
       },
     ];
     const litDatatableWithColumn = new LitDatatableWithColumnTest();
@@ -93,17 +95,47 @@ describe('lit-datatable', () => {
     expect(bodyTds?.length).to.be.equal(6);
   });
 
+  it('header values', async () => {
+    const columns: Array<PropertyColumn> = [
+      {
+        html: (value) => html`${value} <div>test</div>`,
+        property: 'fruit',
+        otherProperties: [],
+      },
+    ];
+    const litDatatableWithColumn = new LitDatatableWithColumnTest();
+    await litDatatableWithColumn.init(basicConf, basicData, [], columns);
+    await litDatatableWithColumn.elementUpdated();
+    const { bodyTds, headThs } = litDatatableWithColumn;
+    expect(bodyTds).to.be.not.equal(null);
+    if (bodyTds) {
+      expect(bodyTds[0]?.textContent).to.be.equal('apple');
+      expect(bodyTds[1]?.textContent).to.be.equal('green');
+      expect(bodyTds[2]?.textContent).to.be.equal('100gr');
+      expect(bodyTds[3]?.textContent).to.be.equal('banana');
+      expect(bodyTds[4]?.textContent).to.be.equal('yellow');
+      expect(bodyTds[5]?.textContent).to.be.equal('140gr');
+    }
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      expect(headThs[0]?.textContent).to.be.equal('Fruit test');
+      expect(headThs[1]?.textContent).to.be.equal('Color');
+      expect(headThs[2]?.textContent).to.be.equal('Weight');
+    }
+  });
+
   it('body values', async () => {
     const columns: Array<PropertyColumn> = [
       {
         html: (value) => html`${value} <div>test</div>`,
         property: 'fruit',
+        otherProperties: [],
       },
     ];
     const litDatatableWithColumn = new LitDatatableWithColumnTest();
     await litDatatableWithColumn.init(basicConf, basicData, columns, []);
     await litDatatableWithColumn.elementUpdated();
-    const { bodyTds } = litDatatableWithColumn;
+    const { bodyTds, headThs } = litDatatableWithColumn;
     expect(bodyTds).to.be.not.equal(null);
     if (bodyTds) {
       expect(bodyTds[0]?.textContent).to.be.equal('apple test');
@@ -112,6 +144,97 @@ describe('lit-datatable', () => {
       expect(bodyTds[3]?.textContent).to.be.equal('banana test');
       expect(bodyTds[4]?.textContent).to.be.equal('yellow');
       expect(bodyTds[5]?.textContent).to.be.equal('140gr');
+    }
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      expect(headThs[0]?.textContent).to.be.equal('Fruit');
+      expect(headThs[1]?.textContent).to.be.equal('Color');
+      expect(headThs[2]?.textContent).to.be.equal('Weight');
+    }
+  });
+
+  it('body other values', async () => {
+    const columns: Array<PropertyColumn> = [
+      {
+        html: (value, otherValues) => html`${value} <div>${otherValues.color}</div>`,
+        property: 'fruit',
+        otherProperties: ['color'],
+      },
+    ];
+    const litDatatableWithColumn = new LitDatatableWithColumnTest();
+    await litDatatableWithColumn.init(basicConf, basicData, columns, []);
+    await litDatatableWithColumn.elementUpdated();
+    const { bodyTds, headThs } = litDatatableWithColumn;
+    expect(bodyTds).to.be.not.equal(null);
+    if (bodyTds) {
+      expect(bodyTds[0]?.textContent).to.be.equal('apple green');
+      expect(bodyTds[1]?.textContent).to.be.equal('green');
+      expect(bodyTds[2]?.textContent).to.be.equal('100gr');
+      expect(bodyTds[3]?.textContent).to.be.equal('banana yellow');
+      expect(bodyTds[4]?.textContent).to.be.equal('yellow');
+      expect(bodyTds[5]?.textContent).to.be.equal('140gr');
+    }
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      expect(headThs[0]?.textContent).to.be.equal('Fruit');
+      expect(headThs[1]?.textContent).to.be.equal('Color');
+      expect(headThs[2]?.textContent).to.be.equal('Weight');
+    }
+  });
+
+  it('body values change conf', async () => {
+    const columns: Array<PropertyColumn> = [
+      {
+        html: (value) => html`${value} <div>test</div>`,
+        property: 'fruit',
+        otherProperties: [],
+      },
+    ];
+    const litDatatableWithColumn = new LitDatatableWithColumnTest();
+    await litDatatableWithColumn.init(basicConf, basicData, columns, []);
+    await litDatatableWithColumn.elementUpdated();
+    let bodyTds;
+    let headThs;
+    ({ bodyTds, headThs } = litDatatableWithColumn);
+    expect(bodyTds).to.be.not.equal(null);
+    if (bodyTds) {
+      expect(bodyTds[0]?.textContent).to.be.equal('apple test');
+      expect(bodyTds[1]?.textContent).to.be.equal('green');
+      expect(bodyTds[2]?.textContent).to.be.equal('100gr');
+      expect(bodyTds[3]?.textContent).to.be.equal('banana test');
+      expect(bodyTds[4]?.textContent).to.be.equal('yellow');
+      expect(bodyTds[5]?.textContent).to.be.equal('140gr');
+    }
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      expect(headThs[0]?.textContent).to.be.equal('Fruit');
+      expect(headThs[1]?.textContent).to.be.equal('Color');
+      expect(headThs[2]?.textContent).to.be.equal('Weight');
+    }
+
+    const newConf: Array<Conf> = [
+      { property: 'fruit', header: 'Fruit', hidden: false },
+      { property: 'weight', header: 'Weight', hidden: false },
+      { property: 'color', header: 'Color', hidden: false },
+    ];
+    litDatatableWithColumn.el.conf = newConf;
+    await litDatatableWithColumn.elementUpdated();
+
+    ({ bodyTds, headThs } = litDatatableWithColumn);
+    expect(bodyTds).to.be.not.equal(null);
+    if (bodyTds) {
+      expect(bodyTds[0]?.textContent).to.be.equal('apple test');
+      expect(bodyTds[1]?.textContent).to.be.equal('100gr');
+      expect(bodyTds[2]?.textContent).to.be.equal('green');
+      expect(bodyTds[3]?.textContent).to.be.equal('banana test');
+      expect(bodyTds[4]?.textContent).to.be.equal('140gr');
+      expect(bodyTds[5]?.textContent).to.be.equal('yellow');
+    }
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      expect(headThs[0]?.textContent).to.be.equal('Fruit');
+      expect(headThs[1]?.textContent).to.be.equal('Weight');
+      expect(headThs[2]?.textContent).to.be.equal('Color');
     }
   });
 });
