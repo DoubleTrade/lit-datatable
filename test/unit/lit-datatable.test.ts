@@ -1,15 +1,16 @@
 import {
   fixture, html, expect, elementUpdated
 } from '@open-wc/testing';
+import sinon from 'sinon';
 import type { LitDatatable, Conf } from '../../lit-datatable';
 import '../../lit-datatable';
 
 class LitDatatableTest {
   el!: LitDatatable;
 
-  async init(conf: Array<Conf>, data: Array<unknown>): Promise<LitDatatable> {
+  async init(conf: Array<Conf>, data: Array<unknown>, stickyHeader?: boolean): Promise<LitDatatable> {
     const litDatatable = html`
-      <lit-datatable .conf="${conf}" .data="${data}"></lit-datatable>
+      <lit-datatable .conf="${conf}" .data="${data}" .stickyHeader="${!!stickyHeader}"></lit-datatable>
     `;
     this.el = await fixture(litDatatable);
     return this.elementUpdated();
@@ -53,10 +54,21 @@ const basicData = [
   { fruit: 'banana', color: 'yellow', weight: '140gr' },
 ];
 
+const basicDataWithSubObject = [
+  { fruit: 'apple', color: 'green', weight: { value: '100gr' } },
+  { fruit: 'banana', color: 'yellow', weight: { value: '140gr' } },
+];
+
 const basicConf: Array<Conf> = [
   { property: 'fruit', header: 'Fruit', hidden: false },
   { property: 'color', header: 'Color', hidden: false },
   { property: 'weight', header: 'Weight', hidden: false },
+];
+
+const basicConfWithSubObject: Array<Conf> = [
+  { property: 'fruit', header: 'Fruit', hidden: false },
+  { property: 'color', header: 'Color', hidden: false },
+  { property: 'weight.value', header: 'Weight', hidden: false },
 ];
 
 describe('lit-datatable', () => {
@@ -89,6 +101,22 @@ describe('lit-datatable', () => {
   it('body values', async () => {
     const litDatatable = new LitDatatableTest();
     await litDatatable.init(basicConf, basicData);
+    await litDatatable.elementUpdated();
+    const { bodyTds } = litDatatable;
+    expect(bodyTds).to.be.not.equal(null);
+    if (bodyTds) {
+      expect(bodyTds[0]?.textContent).to.be.equal('apple');
+      expect(bodyTds[1]?.textContent).to.be.equal('green');
+      expect(bodyTds[2]?.textContent).to.be.equal('100gr');
+      expect(bodyTds[3]?.textContent).to.be.equal('banana');
+      expect(bodyTds[4]?.textContent).to.be.equal('yellow');
+      expect(bodyTds[5]?.textContent).to.be.equal('140gr');
+    }
+  });
+
+  it('body values with sub object', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConfWithSubObject, basicDataWithSubObject);
     await litDatatable.elementUpdated();
     const { bodyTds } = litDatatable;
     expect(bodyTds).to.be.not.equal(null);
@@ -229,5 +257,62 @@ describe('lit-datatable', () => {
     expect(headThs?.length).to.be.equal(3);
     expect(bodyTrs?.length).to.be.equal(1);
     expect(bodyTds?.length).to.be.equal(3);
+  });
+
+  it('tr tap event', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData);
+    await litDatatable.elementUpdated();
+    const { bodyTrs } = litDatatable;
+    expect(bodyTrs).to.be.not.equal(null);
+    if (bodyTrs) {
+      const tapEventSpy = sinon.spy();
+      const tapEvent = new Event('tap');
+      litDatatable.el.addEventListener('tap-tr', tapEventSpy);
+      bodyTrs[0].dispatchEvent(tapEvent);
+      expect(tapEventSpy.callCount).to.be.equal(1);
+    }
+  });
+
+  it('tr mouseover event', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData);
+    await litDatatable.elementUpdated();
+    const { bodyTrs } = litDatatable;
+    expect(bodyTrs).to.be.not.equal(null);
+    if (bodyTrs) {
+      const mouseEventSpy = sinon.spy();
+      const mouseEvent = new Event('mouseover');
+      litDatatable.el.addEventListener('tr-mouseover', mouseEventSpy);
+      bodyTrs[0].dispatchEvent(mouseEvent);
+      expect(mouseEventSpy.callCount).to.be.equal(1);
+    }
+  });
+
+  it('tr mouseout event', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData);
+    await litDatatable.elementUpdated();
+    const { bodyTrs } = litDatatable;
+    expect(bodyTrs).to.be.not.equal(null);
+    if (bodyTrs) {
+      const mouseEventSpy = sinon.spy();
+      const mouseEvent = new Event('mouseout');
+      litDatatable.el.addEventListener('tr-mouseout', mouseEventSpy);
+      bodyTrs[0].dispatchEvent(mouseEvent);
+      expect(mouseEventSpy.callCount).to.be.equal(1);
+    }
+  });
+
+  it('sticky header', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData, true);
+    await litDatatable.elementUpdated();
+    const { headThs } = litDatatable;
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      const eachThIsSticky = Array.from(headThs).every((th) => th.classList.contains('sticky'));
+      expect(eachThIsSticky).to.be.equal(true);
+    }
   });
 });
