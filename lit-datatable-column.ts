@@ -211,3 +211,9 @@ export class LitDatatableColumn extends LitElement {
     this.dispatchEvent(new CustomEvent('dates', { detail }));
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'lit-datatable-column': LitDatatableColumn;
+  }
+}

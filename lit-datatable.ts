@@ -476,3 +476,9 @@ export class LitDatatable extends LitElement {
     return null;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'lit-datatable': LitDatatable;
+  }
+}

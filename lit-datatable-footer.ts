@@ -222,3 +222,9 @@ export class LitDatatableFooter extends Localize(LitElement) {
     }
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'lit-datatable-footer': LitDatatableFooter;
+  }
+}
