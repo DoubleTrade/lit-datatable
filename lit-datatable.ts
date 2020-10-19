@@ -9,7 +9,7 @@ import type { LitDatatableColumn } from './lit-datatable-column';
 export interface Conf {
   header: string;
   property: string;
-  hidden: boolean;
+  hidden?: boolean;
 }
 
 interface EventOfTr {

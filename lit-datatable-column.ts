@@ -1,5 +1,5 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues, TemplateResult
+  LitElement, css, customElement, html, property, PropertyValues
 } from 'lit-element';
 import './helpers/ld-header-with-sort';
 import './helpers/ld-header-with-filter';
@@ -16,7 +16,7 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: Array }) otherProperties: Array<string> = [];
 
-  @property({ type: Function }) html: ((value: string, otherValues: any) => TemplateResult) | null = null;
+  @property({ type: Function }) html: ((value: any, otherValues?: any) => any) | null = null;
 
   @property({ type: Array }) eventsForDom: Array<EventListener> = [];
 
