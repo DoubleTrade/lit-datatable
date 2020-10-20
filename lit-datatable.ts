@@ -148,6 +148,7 @@ export class LitDatatable extends LitElement {
   updated(properties: PropertyValues<{data: Array<unknown>; conf: Array<Conf>; sort: string}>) {
     // Data or conf change we have to generate the table
     if (properties.has('data') || properties.has('conf')) {
+      this.deleteAllEvents();
       this.generateData();
     }
 
@@ -180,6 +181,14 @@ export class LitDatatable extends LitElement {
           .map((a) => [a.property, a]));
       }
     }
+  }
+
+  deleteAllEvents() {
+    this.datatableColumns.forEach((datatableColumn) => {
+      datatableColumn.eventsForDom.forEach((renderer) => {
+        datatableColumn.removeEventListener('html-changed', renderer);
+      });
+    });
   }
 
   renderCell(item: any, td: HTMLTableCellElement, confProperty: string, event?: Event, litDatatableColumn?: LitDatatableColumn) {
