@@ -150,3 +150,7 @@ The format of startDate and endDate is a timestamp.
   <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
 </lit-datatable>
 ```
+
+---
+
+[![Testing Powered By SauceLabs](https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-white.png?sanitize=true 'Testing Powered By SauceLabs')](https://saucelabs.com)
