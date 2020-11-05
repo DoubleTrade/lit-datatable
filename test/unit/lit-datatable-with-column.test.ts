@@ -266,7 +266,7 @@ describe('lit-datatable', () => {
     const { headThs } = litDatatableWithColumn;
     expect(headThs).to.be.not.equal(null);
     if (headThs) {
-      expect(headThs[0]?.style.background).to.be.equal('red');
+      expect(/.*red.*/.test(headThs[0]?.style.background)).to.be.equal(true);
     }
   });
 
@@ -285,8 +285,8 @@ describe('lit-datatable', () => {
     const { bodyTds } = litDatatableWithColumn;
     expect(bodyTds).to.be.not.equal(null);
     if (bodyTds) {
-      expect(bodyTds[0]?.style.background).to.be.equal('red');
-      expect(bodyTds[3]?.style.background).to.be.equal('red');
+      expect(/.*red.*/.test(bodyTds[0]?.style.background)).to.be.equal(true);
+      expect(/.*red.*/.test(bodyTds[3]?.style.background)).to.be.equal(true);
     }
   });
 
