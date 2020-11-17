@@ -125,7 +125,7 @@ export class LitDatatable extends LitElement {
       }
 
       tbody tr:not(:first-child) td {
-        border-top: 1px solid;
+        border-top: var(--lit-datatable-api-td-border-top, 1px solid);
         border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
       }
 
