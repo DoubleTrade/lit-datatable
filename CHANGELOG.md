@@ -1,5 +1,12 @@
 # @doubletrade/lit-datatable
 
+## 1.3.0
+
+### Minor Changes
+
+- Add mixin on td border-top
+- Add saucelabs testing
+
 ## 1.2.0
 
 ### Minor Changes
