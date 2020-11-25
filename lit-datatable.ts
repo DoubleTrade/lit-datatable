@@ -64,7 +64,8 @@ export class LitDatatable extends LitElement {
       }
 
       th {
-        color: rgba(0, 0, 0, var(--dark-secondary-opacity));
+        background: var(--lit-datatable-th-background, white);
+        color: var(--lit-datatable-th-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
         text-align: left;
         white-space: nowrap;
 
@@ -78,7 +79,7 @@ export class LitDatatable extends LitElement {
 
       th.sticky {
         position: sticky;
-        background: white;
+        background: var(--lit-datatable-th-background, white);
         top: 0;
         z-index: 1;
       }
@@ -118,7 +119,7 @@ export class LitDatatable extends LitElement {
       td {
         font-size: 13px;
         font-weight: normal;
-        color: rgba(0, 0, 0, var(--dark-primary-opacity));
+        color: var(--lit-datatable-td-color, rgba(0, 0, 0, var(--dark-primary-opacity)));
         padding: 6px var(--lit-datatable-api-horizontal-padding, 26px);
         cursor: var(--lit-datatable-api-td-cursor, inherit);
         height: 36px;
