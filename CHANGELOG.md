@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.4.0
+
+### Minor Changes
+
+- add some mixin on th and td element
+
 ## 1.3.0
 
 ### Minor Changes
