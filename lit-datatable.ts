@@ -35,7 +35,7 @@ export class LitDatatable extends LitElement {
 
   @property({ type: Array }) headers: Array<HTMLTableHeaderCellElement> = [];
 
-  @property({ type: Boolean, attribute: 'sticky-header' }) stickyHeader = '';
+  @property({ type: Boolean, attribute: 'sticky-header' }) stickyHeader = false;
 
   @property({ type: Boolean }) datatableColumns: Map<string, LitDatatableColumn> = new Map();
 
