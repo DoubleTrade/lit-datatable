@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.5.0
+
+### Minor Changes
+
+- use boolean for sticky header property
+
 ## 1.4.0
 
 ### Minor Changes
