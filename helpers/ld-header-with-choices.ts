@@ -12,9 +12,9 @@ import './ld-header-with-sort';
 export interface Choice {
   key: string;
   label: string;
-  style: string;
-  icon: string;
-  iconStyle: string;
+  style?: string;
+  icon?: string;
+  iconStyle?: string;
 }
 
 @customElement('ld-header-with-choices')
@@ -90,30 +90,32 @@ export class LdHeaderWithChoices extends LitElement {
   render() {
     return html`
       <div class="layout horizontal center">
-
+      
         <div class="layout horizontal center">
           <span class="flex layout horizontal">
             <slot></slot>
             ${this.selectedChoices && this.selectedChoices.length > 0 ? html`
-              <div class="selected">
-                ${this.countSelected(this.selectedChoices)}
-              </div>` : null}
+            <div class="selected">
+              ${this.countSelected(this.selectedChoices)}
+            </div>` : null}
           </span>
           <paper-icon-button icon="arrow-drop-down" @tap="${this.openDropdown.bind(this)}"></paper-icon-button>
         </div>
-
+      
         <div class="dropdown">
           ${this.choices && this.choices.map((choice) => html`
-            <paper-icon-item @tap="${this.tapChoice.bind(this, choice.key)}">
-              <paper-icon-button slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}"></paper-icon-button>
-              <paper-item-body style="${choice.style}">
-                ${choice.label}
-              </paper-item-body>
-              ${choice.icon ? html`<iron-icon class="choice-icon" style="${choice.iconStyle}" icon="${choice.icon}"></iron-icon>` : null}
-            </paper-icon-item>
+          <paper-icon-item @tap="${this.tapChoice.bind(this, choice.key)}">
+            <paper-icon-button slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}">
+            </paper-icon-button>
+            <paper-item-body style="${choice.style}">
+              ${choice.label}
+            </paper-item-body>
+            ${choice.icon ? html`<iron-icon class="choice-icon" style="${choice.iconStyle}" icon="${choice.icon}"></iron-icon>
+            ` : null}
+          </paper-icon-item>
           `)}
         </div>
-
+      
       </div>
   `;
   }
@@ -154,7 +156,7 @@ export class LdHeaderWithChoices extends LitElement {
     ));
   }
 
-  updated(properties: PropertyValues<{opened: boolean}>) {
+  updated(properties: PropertyValues<{ opened: boolean }>) {
     if (properties.has('opened')) {
       if (this.opened) {
         this.dropdown.classList.remove('hide');
