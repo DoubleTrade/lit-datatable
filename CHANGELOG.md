@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.6.0
+
+### Minor Changes
+
+- fix type of choice
+
 ## 1.5.0
 
 ### Minor Changes
