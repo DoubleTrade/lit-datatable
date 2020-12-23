@@ -35,6 +35,9 @@ export class LdHeaderWithDateAndSort extends LitElement {
       :host {
         display: block;
       }
+      .actions {
+        padding-left: 8px;
+      }
       paper-icon-button {
         padding: 0;
         min-width: 24px;
@@ -105,8 +108,8 @@ export class LdHeaderWithDateAndSort extends LitElement {
           <div @tap="${this.toggleActive.bind(this)}">
             ${this.header}
           </div>
-          <div slot="actions">
-            <paper-icon-button icon="search" @tap="${this.toggleActive.bind(this)}"></paper-icon-button>
+          <div class="actions" slot="actions">
+            <paper-icon-button icon="icons:date-range" @tap="${this.toggleActive.bind(this)}"></paper-icon-button>
           </div>
         </ld-header-with-sort>`}`;
   }
