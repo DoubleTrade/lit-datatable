@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.8.0
+
+### Minor Changes
+
+- use yarn, add feature on choice helper
+
 ## 1.6.0
 
 ### Minor Changes
