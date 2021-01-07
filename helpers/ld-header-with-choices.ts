@@ -1,5 +1,5 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues, query
+  LitElement, css, customElement, html, property, PropertyValues, query, TemplateResult
 } from 'lit-element';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-item/paper-icon-item';
@@ -15,6 +15,7 @@ export interface Choice {
   style?: string;
   icon?: string;
   iconStyle?: string;
+  prefix?: TemplateResult;
 }
 
 @customElement('ld-header-with-choices')
@@ -73,6 +74,16 @@ export class LdHeaderWithChoices extends LitElement {
         margin-left: 24px;
       }
 
+      .label {
+        font-size: 13px;
+        font-family: Roboto;
+        font-weight: 400;
+      }
+
+      .prefix {
+        margin-right: 10px;
+      }
+
       paper-icon-button {
         --paper-icon-button: {
           color: var(--paper-icon-button-color);
@@ -104,15 +115,17 @@ export class LdHeaderWithChoices extends LitElement {
       
         <div class="dropdown">
           ${this.choices && this.choices.map((choice) => html`
-          <paper-icon-item @tap="${this.tapChoice.bind(this, choice.key)}">
-            <paper-icon-button slot="item-icon" icon="${this.computeIconName(choice.key, this.selectedChoices)}">
-            </paper-icon-button>
-            <paper-item-body style="${choice.style}">
-              ${choice.label}
-            </paper-item-body>
-            ${choice.icon ? html`<iron-icon class="choice-icon" style="${choice.iconStyle}" icon="${choice.icon}"></iron-icon>
-            ` : null}
-          </paper-icon-item>
+            <div class="layout horizontal center" @tap="${this.tapChoice.bind(this, choice.key)}">
+              <paper-icon-button icon="${this.computeIconName(choice.key, this.selectedChoices)}">
+              </paper-icon-button>
+              ${choice.prefix ? html`<div class="prefix">${choice.prefix}</div>` : null}
+              <div class="label" .style="${choice.style}">
+                ${choice.label}
+              </div>
+              ${choice.icon ? html`
+                <iron-icon class="choice-icon" .style="${choice.iconStyle}" icon="${choice.icon}"></iron-icon>
+              ` : null}
+            </div>
           `)}
         </div>
       
