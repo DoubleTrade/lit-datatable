@@ -277,6 +277,8 @@ export class LdHeaderWithChoices extends LitElement {
   }
 
   updateFilteredChoices() {
-    this.filteredChoices = this.enableFilter ? this.choices.filter((c) => c.label.toLowerCase().includes(this.filterValue.toLowerCase())) : this.choices;
+    this.filteredChoices = (this.enableFilter && this.choices)
+      ? this.choices.filter((c) => c?.label?.toLowerCase().includes(this.filterValue?.toLowerCase()))
+      : this.choices;
   }
 }
