@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.10.0
+
+### Minor Changes
+
+- avoid crash in search in case of choices are not set yet
+
 ## 1.9.0
 
 ### Minor Changes
