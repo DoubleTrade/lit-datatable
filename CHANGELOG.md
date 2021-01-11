@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.9.0
+
+### Minor Changes
+
+- add search on choice filter and fix padding
+
 ## 1.8.0
 
 ### Minor Changes
