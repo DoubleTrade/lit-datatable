@@ -142,6 +142,14 @@ const sort = key => (value, property) => html`
 </lit-datatable>
 ```
 
+## With HTML data and choices filter with value filtering
+```html
+<lit-datatable .data="${data}" .conf="${conf}" @choices="${this.choicesChanged}">
+  <lit-datatable-column header="${true}" property="fruit" enableFilter type="choices" .choices="${this.availableChoices}" .selectedChoices="${this.choices}"></lit-datatable-column>
+  <lit-datatable-column column="${true}" property="fruit" .html="${bodyOfFruit}"></lit-datatable-column>
+</lit-datatable>
+```
+
 ## With HTML data and date filter
 The format of startDate and endDate is a timestamp.
 ```html
