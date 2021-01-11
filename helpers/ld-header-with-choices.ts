@@ -86,6 +86,7 @@ export class LdHeaderWithChoices extends LitElement {
         font-size: 13px;
         font-family: Roboto;
         font-weight: 400;
+        margin-right: 16px;
       }
 
       .prefix {
