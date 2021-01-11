@@ -312,6 +312,9 @@ export class LitDatatable extends LitElement {
         } else {
           th.setAttribute('style', '');
         }
+        if (this.stickyHeader) {
+          th.style.zIndex = `${confs.length - i}`;
+        }
         if (datatableHeader) {
           th.dataset.property = p;
           this.setEventListener(datatableHeader, 0,

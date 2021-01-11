@@ -22,6 +22,8 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: String }) sort = '';
 
+  @property({ type: Boolean }) enableFilter = false;
+
   @property({ type: String }) type?: TypeOfColumn = undefined;
 
   @property({ type: String }) language: Language = 'en';
@@ -106,6 +108,7 @@ export class LitDatatableColumn extends LitElement {
         this.html = (value: string, p: string) => html`
           <ld-header-with-choices
             .choices="${this.choices}"
+            .enableFilter=${this.enableFilter}
             .selectedChoices="${this.selectedChoices}"
             .property="${p}"
             @selected-choices-changed="${this.handleFilterChoiceChanged.bind(this)}">

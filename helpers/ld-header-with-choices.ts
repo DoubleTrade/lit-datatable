@@ -22,6 +22,14 @@ export interface Choice {
 export class LdHeaderWithChoices extends LitElement {
   @property({ type: Array }) choices: Array<Choice> = [];
 
+  @property({ type: Boolean }) enableFilter = false;
+
+  @property({ type: String }) filterValue = '';
+
+  @query('#filterInput') filterInput!: HTMLInputElement;
+
+  @property({ type: Array }) filteredChoices: Array<Choice> = [];
+
   @property({ type: Array }) selectedChoices: Array<string> = [];
 
   @property({ type: String }) property = '';
@@ -94,6 +102,30 @@ export class LdHeaderWithChoices extends LitElement {
           color: var(--paper-icon-button-color-hover);
         }
       }
+
+      #search-container {
+        padding: 6px 6px 6px 10px;
+        border-bottom: 1px solid #E0E0E0;
+      }
+
+      #search-container input{
+          border: none;
+          font-size: var(--header-filter-input-font-size, 16px);
+          width: calc(100% - 30px);
+          outline: none;
+          background: transparent;
+          height: 24px;
+          padding: 0;
+          color: var(--dt-input-text-color, black);
+          box-shadow: none;
+          min-width: 0;
+      }
+      #search-container input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px white inset !important;
+      }
     `;
     return [main, ironFlexLayoutTheme, ironFlexLayoutAlignTheme];
   }
@@ -114,7 +146,16 @@ export class LdHeaderWithChoices extends LitElement {
         </div>
       
         <div class="dropdown">
-          ${this.choices && this.choices.map((choice) => html`
+          ${this.enableFilter ? html`
+            <div id="search-container">
+              <input id="filterInput"
+                @input=${this.filterValueChanged.bind(this)}
+                @change=${this.filterValueChanged.bind(this)} 
+                .value="${this.filterValue}" />
+              <iron-icon icon="icons:search"></iron-icon>
+            </div>
+          ` : null}
+          ${this.filteredChoices && this.filteredChoices.map((choice) => html`
             <div class="layout horizontal center" @tap="${this.tapChoice.bind(this, choice.key)}">
               <paper-icon-button icon="${this.computeIconName(choice.key, this.selectedChoices)}">
               </paper-icon-button>
@@ -169,14 +210,21 @@ export class LdHeaderWithChoices extends LitElement {
     ));
   }
 
-  updated(properties: PropertyValues<{ opened: boolean }>) {
+  updated(properties: PropertyValues<LdHeaderWithChoices>) {
     if (properties.has('opened')) {
       if (this.opened) {
         this.dropdown.classList.remove('hide');
+        if (this.enableFilter) {
+          this.filterInput.focus();
+          this.filterValue = '';
+        }
       } else {
         this.dropdown.classList.add('hide');
       }
       this.fitToBorder();
+    }
+    if (properties.has('enableFilter') || properties.has('choices') || properties.has('filterValue')) {
+      this.updateFilteredChoices();
     }
   }
 
@@ -219,5 +267,15 @@ export class LdHeaderWithChoices extends LitElement {
         this.opened = false;
       }
     });
+  }
+
+  filterValueChanged(event: InputEvent) {
+    event.stopPropagation();
+    const target = event.target as HTMLInputElement;
+    this.filterValue = target.value;
+  }
+
+  updateFilteredChoices() {
+    this.filteredChoices = this.enableFilter ? this.choices.filter((c) => c.label.toLowerCase().includes(this.filterValue.toLowerCase())) : this.choices;
   }
 }
