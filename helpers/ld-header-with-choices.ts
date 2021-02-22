@@ -65,10 +65,12 @@ export class LdHeaderWithChoices extends LitElement {
       }
 
       paper-icon-button[icon="check-box"] {
+        min-width: 40px;
         color: var(--paper-datatable-api-checked-checkbox-color, --primary-color);
       }
 
       paper-icon-button[icon="check-box-outline-blank"] {
+        min-width: 40px;
         color: var(--paper-datatable-api-unchecked-checkbox-color, --primary-text-color);
       }
 
