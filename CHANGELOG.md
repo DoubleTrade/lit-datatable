@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.11.0
+
+### Minor Changes
+
+- fix checkbox display on FF
+
 ## 1.10.0
 
 ### Minor Changes
