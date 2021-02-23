@@ -214,10 +214,10 @@
     human-id "^1.0.2"
     prettier "^1.18.2"
 
-"@doubletrade/lit-datepicker@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.npmjs.org/@doubletrade/lit-datepicker/-/lit-datepicker-0.6.0.tgz"
-  integrity sha512-guGXBYvGvFyrZ2+2RWRQgPpUtvwoVw62l0Cvabr96KFkXpshba8568jqdUWeF1xpNteO2lDTtVtrdlKLRwR2AA==
+"@doubletrade/lit-datepicker@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@doubletrade/lit-datepicker/-/lit-datepicker-0.6.1.tgz#0632b750ee87ddebb69d71dc646d82fc53f5086c"
+  integrity sha512-MlineACYVLxKacSw7yKtrpP3z6TmkZ5mlDw94oTbKE6ZCAJXE0CFOUZdPBGy0gwiThoscXrTjt+A1ZGfn7TwsQ==
   dependencies:
     "@polymer/iron-dropdown" "^3.0.0"
     "@polymer/iron-flex-layout" "^3.0.1"
