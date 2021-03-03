@@ -117,13 +117,13 @@ export class LitDatatableFooter extends Localize(LitElement) {
   render() {
     return html`
       <style>
-        paper-dropdown-menu	{
-          --paper-dropdown-menu: {
+        paper-dropdown-menu {
+          --paper-dropdown-menu: {
             color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
           --paper-input-container-color: var(--lit-datatable-footer-color);
           --paper-input-container-input-color: var(--lit-datatable-footer-color);
           }
-          --paper-dropdown-menu-input: {
+          --paper-dropdown-menu-input: {
             color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
           }
           --paper-input-container-input: {
