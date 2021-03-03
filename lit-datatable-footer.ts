@@ -82,9 +82,9 @@ export class LitDatatableFooter extends Localize(LitElement) {
         font-weight: normal;
         height: 55px;
         border-top: 1px solid;
-        border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+        border-color: var(--lit-datatable-divider-color, rgba(0, 0, 0, var(--dark-divider-opacity)));
         padding: 0 14px 0 0;
-        color: rgba(0, 0, 0, var(--dark-secondary-opacity));
+        color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
       }
 
       .foot .left {
@@ -106,12 +106,35 @@ export class LitDatatableFooter extends Localize(LitElement) {
         width: 64px;
         text-align: right;
       }
+
+      paper-dropdown-menu {
+        color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
+      }
       `;
     return [mainStyle, ironFlexLayoutAlignTheme, ironFlexLayoutTheme];
   }
 
   render() {
     return html`
+      <style>
+        paper-dropdown-menu	{
+          --paper-dropdown-menu: {
+            color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
+          --paper-input-container-color: var(--lit-datatable-footer-color);
+          --paper-input-container-input-color: var(--lit-datatable-footer-color);
+          }
+          --paper-dropdown-menu-input: {
+            color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
+          }
+          --paper-input-container-input: {
+            color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
+          }
+          --paper-listbox-background-color: var(--lit-datatable-footer-background, white);
+          --paper-dropdown-menu-icon: {
+            color: var(--lit-datatable-footer-color, rgba(0, 0, 0, var(--dark-secondary-opacity)));
+          }
+        }
+      </style>
       <div class="layout horizontal center foot ${this.computePosition(this.footerPosition)}">
         <div class="${this.footerPosition}">
           <div class="layout horizontal end-justified center">

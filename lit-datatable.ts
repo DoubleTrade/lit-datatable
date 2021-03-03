@@ -74,7 +74,7 @@ export class LitDatatable extends LitElement {
         padding: var(--lit-datatable-api-header-padding, 6px 26px);
 
         border-bottom: 1px solid;
-        border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+        border-color: var(--lit-datatable-divider-color, rgba(0, 0, 0, var(--dark-divider-opacity)))
       }
 
       th.sticky {
@@ -127,7 +127,7 @@ export class LitDatatable extends LitElement {
 
       tbody tr:not(:first-child) td {
         border-top: var(--lit-datatable-api-td-border-top, 1px solid);
-        border-color: rgba(0, 0, 0, var(--dark-divider-opacity));
+        border-color: var(--lit-datatable-divider-color, rgba(0, 0, 0, var(--dark-divider-opacity)))
       }
 
       thead th.customTd,
