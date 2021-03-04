@@ -46,16 +46,17 @@ export class LdHeaderWithChoices extends LitElement {
 
       .dropdown {
         position: fixed;
-        background: white;
+        background: var(--ld-header-with-choices-background-color, white);
         transform-origin: 50% 0;
         transition: transform 0.1s;
         transform: scaleY(1);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        box-shadow: var(--ld-header-with-choices-box-shadown, 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24));
         width: var(--dt-dropdown-choice-dropdown-width, max-content);
         z-index: 99;
         max-height: 300px;
         overflow: auto;
         margin: var(--dt-dropdown-choice-dropdown-margin, 0);
+        color: var(--primary-text-color, black);
         border-radius: var(--dt-dropdown-choice-dropdown-border-radius, 0);
         box-shadow: var(--dt-dropdown-choice-dropdown-box-shadow, 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24));
       }
