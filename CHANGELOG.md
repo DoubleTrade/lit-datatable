@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.13.0
+
+### Minor Changes
+
+- add some mixins for choice helper
+
 ## 1.12.0
 
 ### Minor Changes
