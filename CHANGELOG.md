@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.14.0
+
+### Minor Changes
+
+- bump lit-datepicker
+
 ## 1.13.0
 
 ### Minor Changes
