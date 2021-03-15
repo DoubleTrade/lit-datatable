@@ -1,10 +1,12 @@
-import { LitElement } from 'lit-element';
-
 export type Language = 'en' | 'fr' | 'en-en' | 'en-US' | 'en-us' | 'fr-fr';
 
 interface Resource {
   [key: string]: string;
 }
+
+type Constructor<T> = {
+  new (...args: any[]): T;
+};
 
 export interface Resources {
   en: Resource;
@@ -15,7 +17,7 @@ export interface Resources {
   'fr-fr': Resource;
 }
 
-export default (superclass: typeof LitElement) => class Localize extends superclass {
+export default <C extends Constructor<HTMLElement>>(subclass: C) => class extends subclass {
   language: Language | null = null;
 
   resources: Resources | null = null;

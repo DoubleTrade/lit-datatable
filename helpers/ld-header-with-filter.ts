@@ -9,7 +9,7 @@ import Localize from '../localize';
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from '../iron-flex-import';
 
 @customElement('ld-header-with-filter')
-export class LdHeaderWithFilter extends Localize(LitElement) {
+export default class LdHeaderWithFilter extends Localize(LitElement) {
   @property({ type: String }) header = '';
 
   @property({ type: String }) direction: '' | 'asc' | 'desc' = '';
