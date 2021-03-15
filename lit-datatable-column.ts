@@ -117,7 +117,7 @@ export class LitDatatableColumn extends LitElement {
       }
     }
 
-    if (properties.has('type') || properties.has('choices') || properties.has('selectedChoices') || properties.has('sort')) {
+    if (properties.has('type') || properties.has('start') || properties.has('stop') || properties.has('sort')) {
       if (this.type === 'dateSort') {
         this.html = (value: string, p: string) => html`
           <ld-header-with-date-and-sort
