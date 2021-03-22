@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.15.0
+
+### Minor Changes
+
+- fix deps version and fix an issue with date column
+
 ## 1.14.0
 
 ### Minor Changes
