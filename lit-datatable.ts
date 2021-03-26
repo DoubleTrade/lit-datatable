@@ -117,7 +117,7 @@ export class LitDatatable extends LitElement {
       }
 
       td {
-        font-size: 13px;
+        font-size: var(--lit-datatable-td-font-size, 13px);
         font-weight: normal;
         color: var(--lit-datatable-td-color, rgba(0, 0, 0, var(--dark-primary-opacity)));
         padding: 6px var(--lit-datatable-api-horizontal-padding, 26px);
