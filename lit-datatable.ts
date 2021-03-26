@@ -120,7 +120,7 @@ export class LitDatatable extends LitElement {
         font-size: var(--lit-datatable-td-font-size, 13px);
         font-weight: normal;
         color: var(--lit-datatable-td-color, rgba(0, 0, 0, var(--dark-primary-opacity)));
-        padding: 6px var(--lit-datatable-api-horizontal-padding, 26px);
+        padding: var(--lit-datatable-api-td-padding, 6px var(--lit-datatable-api-horizontal-padding, 26px));
         cursor: var(--lit-datatable-api-td-cursor, inherit);
         height: 36px;
       }
