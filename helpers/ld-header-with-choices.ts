@@ -249,7 +249,7 @@ export class LdHeaderWithChoices extends LitElement {
         } else {
           this.dropdown.style.left = `${thisX}px`;
         }
-        this.dropdown.style.top = `${thisY + this.offsetHeight}px`;
+        this.dropdown.style.top = `${thisY + this.offsetHeight + 9}px`;
       }
     }
   }
