@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.16.0
+
+### Minor Changes
+
+- Some fixes and graphical fixes
+
 ## 1.15.0
 
 ### Minor Changes
