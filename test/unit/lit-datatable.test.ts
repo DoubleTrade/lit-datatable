@@ -315,4 +315,16 @@ describe('lit-datatable', () => {
       expect(eachThIsSticky).to.be.equal(true);
     }
   });
+
+  it('non sticky header', async () => {
+    const litDatatable = new LitDatatableTest();
+    await litDatatable.init(basicConf, basicData, false);
+    await litDatatable.elementUpdated();
+    const { headThs } = litDatatable;
+    expect(headThs).to.be.not.equal(null);
+    if (headThs) {
+      const eachThIsSticky = Array.from(headThs).every((th) => th.classList.contains('sticky'));
+      expect(eachThIsSticky).to.be.equal(false);
+    }
+  });
 });
