@@ -147,7 +147,7 @@ export class LitDatatable extends LitElement {
     `;
   }
 
-  updated(properties: PropertyValues<{data: Array<unknown>; conf: Array<Conf>; sort: string}>) {
+  updated(properties: PropertyValues<{ data: Array<unknown>; conf: Array<Conf>; sort: string, stickyHeader: boolean }>) {
     // Data or conf change we have to generate the table
     if ((properties.has('data') && !deepEqual(properties.get('data'), this.data))
       || (properties.has('conf') && !deepEqual(properties.get('conf'), this.conf))) {
@@ -155,7 +155,7 @@ export class LitDatatable extends LitElement {
       this.generateData();
     }
 
-    if (properties.has('conf')) {
+    if (properties.has('conf') || properties.has('stickyHeader')) {
       const confs = [...this.conf].filter((c) => !c.hidden);
       this.updateHeaders(confs);
     }
@@ -302,11 +302,9 @@ export class LitDatatable extends LitElement {
           th = this.headers[i];
         } else {
           th = document.createElement('th');
-          if (this.stickyHeader) {
-            th.classList.add('sticky');
-          }
           this.headers.push(th);
         }
+        th.classList.toggle('sticky', this.stickyHeader);
         if (datatableHeader && datatableHeader.columnStyle) {
           th.setAttribute('style', datatableHeader.columnStyle);
         } else {
