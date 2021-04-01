@@ -69,7 +69,7 @@ export class LitDatatableFooter extends Localize(LitElement) {
 
   @property({ type: Number }) totalPages = 0;
 
-  @property({ type: Array }) availableSize = [];
+  @property({ type: Array }) availableSize: Array<number> = [];
 
   static get styles() {
     const mainStyle = css`

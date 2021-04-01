@@ -7,6 +7,7 @@ import './helpers/ld-header-with-date-and-sort';
 import './helpers/ld-header-with-filter-and-sort';
 import './helpers/ld-header-with-choices';
 import { Language } from './localize';
+import { Choice } from './helpers/ld-header-with-choices';
 
 type TypeOfColumn = 'sort' | 'filter' | 'choices' | 'dateSortNoRange' | 'dateSort' | 'filterSort';
 
@@ -38,9 +39,9 @@ export class LitDatatableColumn extends LitElement {
 
   @property({ type: String }) filterValue = '';
 
-  @property({ type: Array }) choices = '';
+  @property({ type: Array }) choices: Array<Choice> = [];
 
-  @property({ type: Array }) selectedChoices = '';
+  @property({ type: Array }) selectedChoices: Array<string> = [];
 
   @property({ type: String }) start = '';
 
