@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.18.0
+
+### Minor Changes
+
+- use type for ld-header-with-choices
+
 ## 1.17.0
 
 ### Minor Changes
