@@ -7,7 +7,7 @@ import './helpers/ld-header-with-date-and-sort';
 import './helpers/ld-header-with-filter-and-sort';
 import './helpers/ld-header-with-choices';
 import { Language } from './localize';
-import { Choice } from './helpers/ld-header-with-choices';
+import type { Choice } from './helpers/ld-header-with-choices';
 
 type TypeOfColumn = 'sort' | 'filter' | 'choices' | 'dateSortNoRange' | 'dateSort' | 'filterSort';
 
