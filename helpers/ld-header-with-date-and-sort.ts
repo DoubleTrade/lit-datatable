@@ -7,12 +7,13 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@doubletrade/lit-datepicker/lit-datepicker-input';
 import { ironFlexLayoutAlignTheme, ironFlexLayoutTheme } from '../iron-flex-import';
 import './ld-header-with-sort';
+import { Language } from '../localize';
 
 @customElement('ld-header-with-date-and-sort')
 export class LdHeaderWithDateAndSort extends LitElement {
   @property({ type: String }) header = '';
 
-  @property({ type: String }) language = '';
+  language: Language | null = 'en';
 
   @property({ type: String }) dateFormat = '';
 

@@ -37,9 +37,9 @@ export class LitDatatable extends LitElement {
 
   @property({ type: Boolean, attribute: 'sticky-header' }) stickyHeader = false;
 
-  @property({ type: Boolean }) datatableColumns: Map<string, LitDatatableColumn> = new Map();
+  @property({ type: Object }) datatableColumns: Map<string, LitDatatableColumn> = new Map();
 
-  @property({ type: Boolean }) datatableHeaders: Map<string, LitDatatableColumn> = new Map();
+  @property({ type: Object }) datatableHeaders: Map<string, LitDatatableColumn> = new Map();
 
   @property({ type: Number }) lastConfSize = 0;
 
@@ -129,9 +129,6 @@ export class LitDatatable extends LitElement {
         border-top: var(--lit-datatable-api-td-border-top, 1px solid);
         border-color: var(--lit-datatable-divider-color, rgba(0, 0, 0, var(--dark-divider-opacity)))
       }
-
-      thead th.customTd,
-      tbody td.customTd {}
       `;
 
     return [mainStyle];
