@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.19.0
+
+### Minor Changes
+
+- include sourcemaps in publicated sources
+
 ## 1.18.0
 
 ### Minor Changes
