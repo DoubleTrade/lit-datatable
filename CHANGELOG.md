@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.20.0
+
+### Minor Changes
+
+- add way to scroll to a row
+
 ## 1.19.0
 
 ### Minor Changes
