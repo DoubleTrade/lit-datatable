@@ -45,6 +45,13 @@ export class LitDatatable extends LitElement {
 
   @property({ type: Number }) lastDataSize = 0;
 
+  /**
+    * The property's name that is a unique key for each element in "data"
+    * (e.g. "productId" or "id")
+    *
+   */
+  @property({ type: String }) key?:string;
+
   debounceGenerate = 0;
 
   static get styles() {
@@ -110,6 +117,10 @@ export class LitDatatable extends LitElement {
 
       tbody tr:hover {
         background: var(--lit-datatable-api-tr-hover-background-color, none);
+      }
+
+      tbody tr.is-currently-highlight {
+        background: var(--lit-datatable-api-tr-highlight-background-color, none);
       }
 
       tbody tr.selected {
@@ -392,6 +403,10 @@ export class LitDatatable extends LitElement {
 
   createTr(lineIndex: number, item: any) {
     const tr = document.createElement('tr');
+    if (this.key && Object.prototype.hasOwnProperty.call(item, this.key)) {
+      const data = this.extractData(item, this.key);
+      tr.classList.add(`key-${data}`);
+    }
     if (!this.table[lineIndex]) {
       this.table[lineIndex] = { element: tr, columns: [], events: this.createEventsOfTr(tr, item) };
     }
@@ -482,6 +497,26 @@ export class LitDatatable extends LitElement {
       return item[columnProperty];
     }
     return null;
+  }
+
+  /**
+    * Scroll to a tr with the key
+    * The key property have to be set
+    *
+   */
+  async scrollOnTr(key: string) {
+    if (this.shadowRoot && key) {
+      await this.updateComplete;
+      const classPrimaryDisplayed = 'is-currently-highlight';
+      this.shadowRoot.querySelectorAll(`.${classPrimaryDisplayed}`).forEach((tr) => {
+        tr.classList.remove(classPrimaryDisplayed);
+      });
+      const trToScroll = this.shadowRoot.querySelector(`tr.key-${key}`);
+      if (trToScroll) {
+        trToScroll.scrollIntoView({ block: 'center', inline: 'nearest' });
+        trToScroll.classList.add(classPrimaryDisplayed);
+      }
+    }
   }
 }
 
