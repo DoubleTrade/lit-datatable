@@ -402,11 +402,7 @@ export class LitDatatable extends LitElement {
   }
 
   createTr(lineIndex: number, item: any) {
-    const tr = document.createElement('tr');
-    if (this.key && Object.prototype.hasOwnProperty.call(item, this.key)) {
-      const data = this.extractData(item, this.key);
-      tr.classList.add(`key-${data}`);
-    }
+    const tr = this.setKeyToTr(document.createElement('tr'), item);
     if (!this.table[lineIndex]) {
       this.table[lineIndex] = { element: tr, columns: [], events: this.createEventsOfTr(tr, item) };
     }
@@ -417,6 +413,14 @@ export class LitDatatable extends LitElement {
     const td = document.createElement('td') as HTMLTableCellElement;
     this.table[lineIndex].columns.push(td);
     return td;
+  }
+
+  setKeyToTr(tr: HTMLTableRowElement, item: any) {
+    if (this.key && Object.prototype.hasOwnProperty.call(item, this.key)) {
+      const data = this.extractData(item, this.key);
+      tr.classList.add(`key-${data}`);
+    }
+    return tr;
   }
 
   updateBody(confs: Array<Conf>) {
@@ -432,6 +436,8 @@ export class LitDatatable extends LitElement {
         if (this.table[lineIndex]) {
           this.cleanEventsOfTr(this.table[lineIndex]);
           tr = this.table[lineIndex].element;
+          tr.className = '';
+          tr = this.setKeyToTr(tr, item);
           this.table[lineIndex].events = this.createEventsOfTr(tr, item);
         } else {
           tr = this.createTr(lineIndex, item);
