@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.21.0
+
+### Minor Changes
+
+- better compute class of current key
+
 ## 1.20.0
 
 ### Minor Changes
