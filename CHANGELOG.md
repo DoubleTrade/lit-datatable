@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 1.22.0
+
+### Minor Changes
+
+- update lit-datepicker version
+
 ## 1.21.0
 
 ### Minor Changes
