@@ -1,4 +1,4 @@
-import { unsafeCSS } from 'lit-element/lit-element';
+import { unsafeCSS } from 'lit';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 
 const ironFlexLayoutThemeTemplate = customElements.get('dom-module').import('iron-flex', 'template');

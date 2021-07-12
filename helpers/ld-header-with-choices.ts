@@ -1,6 +1,7 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues, query, TemplateResult
-} from 'lit-element';
+  LitElement, css, html, PropertyValues, TemplateResult
+} from 'lit';
+import { property, customElement, query } from 'lit/decorators.js';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-item/paper-item-body';

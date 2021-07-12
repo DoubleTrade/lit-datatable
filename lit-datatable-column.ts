@@ -1,6 +1,7 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues
-} from 'lit-element';
+  LitElement, css, html, PropertyValues
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import './helpers/ld-header-with-sort';
 import './helpers/ld-header-with-filter';
 import './helpers/ld-header-with-date-and-sort';

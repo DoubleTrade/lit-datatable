@@ -1,6 +1,7 @@
 import {
-  LitElement, css, customElement, html, property
-} from 'lit-element';
+  LitElement, css, html
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import type { PaperDropdownMenuElement } from '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import type { PaperListboxElement } from '@polymer/paper-listbox/paper-listbox';

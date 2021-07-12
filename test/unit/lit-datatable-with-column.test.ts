@@ -1,7 +1,7 @@
 import {
   fixture, html, expect, elementUpdated
 } from '@open-wc/testing';
-import { TemplateResult } from 'lit-element';
+import { TemplateResult, html as litHtml } from 'lit';
 import type { LitDatatable, Conf } from '../../lit-datatable';
 import '../../lit-datatable';
 import '../../lit-datatable-column';
@@ -91,7 +91,7 @@ describe('lit-datatable', () => {
   it('counts', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} test`,
+        html: (value) => litHtml`${value} test`,
         property: 'fruit',
         otherProperties: [],
       },
@@ -111,7 +111,7 @@ describe('lit-datatable', () => {
   it('header values', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} <div>test</div>`,
+        html: (value) => litHtml`${value} <div>test</div>`,
         property: 'fruit',
         otherProperties: [],
       },
@@ -140,7 +140,7 @@ describe('lit-datatable', () => {
   it('body values', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} <div>test</div>`,
+        html: (value) => litHtml`${value} <div>test</div>`,
         property: 'fruit',
         otherProperties: [],
       },
@@ -169,7 +169,7 @@ describe('lit-datatable', () => {
   it('body other values', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value, otherValues) => html`${value} <div>${otherValues.color}</div>`,
+        html: (value, otherValues) => litHtml`${value} <div>${otherValues.color}</div>`,
         property: 'fruit',
         otherProperties: ['color'],
       },
@@ -198,7 +198,7 @@ describe('lit-datatable', () => {
   it('body values change conf', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} <div>test</div>`,
+        html: (value) => litHtml`${value} <div>test</div>`,
         property: 'fruit',
         otherProperties: [],
       },
@@ -254,7 +254,7 @@ describe('lit-datatable', () => {
   it('header styles', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} <div>test</div>`,
+        html: (value) => litHtml`${value} <div>test</div>`,
         property: 'fruit',
         otherProperties: [],
         columnStyle: 'background: red;',
@@ -273,7 +273,7 @@ describe('lit-datatable', () => {
   it('body styles', async () => {
     const columns: Array<PropertyColumn> = [
       {
-        html: (value) => html`${value} <div>test</div>`,
+        html: (value) => litHtml`${value} <div>test</div>`,
         property: 'fruit',
         otherProperties: [],
         columnStyle: 'background: red;',

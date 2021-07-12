@@ -1,6 +1,7 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues
-} from 'lit-element';
+  LitElement, css, html, PropertyValues
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';

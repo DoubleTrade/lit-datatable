@@ -1,9 +1,9 @@
 import {
-  LitElement, css, customElement, html, property, PropertyValues
-} from 'lit-element';
+  LitElement, css, html, PropertyValues, render
+} from 'lit';
+import { property, customElement } from 'lit/decorators.js';
 import { deepEqual } from 'fast-equals';
 
-import { render } from 'lit-html';
 import type { LitDatatableColumn } from './lit-datatable-column';
 
 export interface Conf {

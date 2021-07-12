@@ -35,7 +35,7 @@
     "@polymer/paper-tooltip": "^3.0.1",
     "@polymer/polymer": "^3.4.1",
     "fast-equals": "^2.0.0",
-    "lit-element": "^2.4.0"
+    "lit": "2.0.0-rc.2"
   },
   "devDependencies": {
     "@changesets/cli": "2.14.1",

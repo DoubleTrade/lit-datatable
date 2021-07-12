@@ -1,6 +1,8 @@
 import {
-  LitElement, customElement, html, property
-} from 'lit-element';
+  LitElement, html
+} from 'lit';
+
+import { property, customElement } from 'lit/decorators.js';
 import type { Conf } from '../../lit-datatable';
 import '../../lit-datatable';
 import '../../lit-datatable-column';
