@@ -1,5 +1,11 @@
 # @doubletrade/lit-datatable
 
+## 2.0.0
+
+### Major Changes
+
+- Migrate to lit
+
 ## 1.22.0
 
 ### Minor Changes
