@@ -17,6 +17,8 @@ npm install @doubletrade/lit-datatable
 
 ## Launch demo
 ```
+npm install
+npm run build
 npm run serve
 ```
 
